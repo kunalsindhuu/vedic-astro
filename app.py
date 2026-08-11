@@ -238,7 +238,14 @@ BLOG_POSTS = [
         'excerpt': 'Your moon sign reveals your emotional nature, subconscious patterns, and what makes you feel secure...',
         'date': '2026-08-10',
         'category': 'Basics',
-        'read_time': '5 min'
+        'read_time': '5 min',
+        'content': [
+            'In Vedic astrology, the Moon holds a place of honour that it never receives in Western astrology. While the Sun represents your conscious identity, career, and outer drive, the Moon governs your mind, your emotions, your habits, and the instinctive patterns that shape how you react when no one is watching.',
+            'Your Moon sign is the sign the Moon occupied at your moment of birth. Because the Moon travels through all twelve signs in roughly 27 days, its position is deeply personal and changes almost daily — which is why two people born just days apart can have completely different emotional landscapes.',
+            'In the Vimshottari Dasha system, the Moon is one of the most important planets of all. The nakshatra (lunar mansion) that the Moon occupies at birth determines the very first dasha period you are born under, and it anchors your entire life timeline. This is why traditional astrologers always begin a reading by examining the Moon.',
+            'To find your Moon sign, you need your exact date, time, and place of birth. Unlike the Sun sign, which only needs your date, the Moon moves fast enough that your birth time and location matter greatly. If you have never checked your Moon sign, try our free kundli calculator and be prepared to be surprised — your emotional self may be very different from your zodiac-sign personality.',
+            'Once you know your Moon sign, you can begin to understand why certain situations trigger you, what kind of home life you crave, and how you nurture yourself best. The Moon is the mind, and understanding your Moon sign is the first real step toward self-mastery.'
+        ]
     },
     {
         'id': 'vimshottari-dasha-explained',
@@ -246,7 +253,15 @@ BLOG_POSTS = [
         'excerpt': 'Learn how the ancient Vimshottari Dasha system can predict major life events and opportunities...',
         'date': '2026-08-08',
         'category': 'Predictive',
-        'read_time': '7 min'
+        'read_time': '7 min',
+        'content': [
+            'The Vimshottari Dasha system is the crown jewel of Vedic predictive astrology. It is a timeline of your life divided into planetary periods, and once you understand it, you understand why some years feel effortless while others feel like an uphill battle.',
+            'The word Vimshottari means "120" — the system is based on a total cycle of 120 years, divided among the nine planets (Sun, Moon, Mars, Rahu, Jupiter, Saturn, Mercury, Ketu, Venus). Each planet rules a specific number of years: the Sun rules 6, the Moon 10, Mars 7, Rahu 18, Jupiter 16, Saturn 19, Mercury 17, Ketu 7, and Venus 20.',
+            'At the moment of your birth, the Moon is in a specific nakshatra. The remaining portion of that nakshatra determines which planet\'s period begins your life, and from there the cycle unfolds in a fixed order. The planet that was "running" at birth carries great significance — it shapes your early childhood and the atmosphere of your family.',
+            'Each major period (Mahadasha) is further divided into sub-periods (Antardashas) of the other planets. This creates a rich, layered timeline. For example, during your Jupiter Mahadasha, Jupiter-related themes like education, wisdom, children, and expansion will dominate — but the exact flavour depends on which Antardasha is running at any given moment.',
+            'Vedic astrologers use the dasha timeline to time major events: marriage, career changes, financial gains, health challenges, and spiritual growth. When a beneficial planet runs its period in a favourable house, doors open. When a difficult planet runs its course, the same doors may close — not as punishment, but as a necessary lesson.',
+            'The most empowering way to use dasha knowledge is forewarned is forearmed. If you know Saturn is running its period through your 8th house, you can prepare by slowing down, being disciplined with finances, and focusing on long-term health. Knowledge of your dasha does not change the stars; it changes how you dance with them.'
+        ]
     },
     {
         'id': 'raj-yogas-in-vedic-astrology',
@@ -254,7 +269,15 @@ BLOG_POSTS = [
         'excerpt': 'Discover the powerful Raj Yogas that can bring wealth, power, and recognition in your life...',
         'date': '2026-08-05',
         'category': 'Yogas',
-        'read_time': '6 min'
+        'read_time': '6 min',
+        'content': [
+            'In Vedic astrology, a Yoga is a specific combination of planets, houses, or signs that produces a particular result. Among the most celebrated are the Raj Yogas — the "royal combinations" that are said to elevate a person to positions of authority, wealth, and fame.',
+            'The most famous Raj Yoga is the combination of the lord of the 9th house (Bhagyesha, lord of fortune) with the lord of the 10th house (Karmesha, lord of career). When these two planetary lords join together — either by conjunction, exchange, or mutual aspect — the person is promised success in career, fame, and divine grace.',
+            'Another important combination involves the lord of the 5th house (the house of intelligence and past good karma) joining the lord of the 9th house. This is called Dharma-Karmadhipati Raj Yoga and is considered one of the most auspicious. Such a person often rises through integrity, talent, and righteous action.',
+            'There are also planet-specific Raj Yogas. Jupiter (Guru) is the natural karaka of fortune, and Venus (Shukra) is the natural karaka of luxury and the arts. When Jupiter and Venus conjoin, the Gaja-Kesari-like grace is amplified — a person of learning who also enjoys the finer things in life.',
+            'However, a Raj Yoga is only as powerful as its planets. If the yogakaraka planet is weak, debilitated, or combust, the yoga fructifies later in life or in a muted way. Timing matters enormously — a Raj Yoga in your chart is activated only when the relevant planet runs its dasha or is activated by a favourable transit.',
+            'The practical lesson: even the most royal chart requires effort, character, and timing. Astrology does not hand you a throne; it tells you which staircase to climb and when the royal elevator will arrive. Our kundli calculator automatically detects major yogas in your chart — check yours today.'
+        ]
     },
     {
         'id': 'saturn-transit-2026',
@@ -262,7 +285,15 @@ BLOG_POSTS = [
         'excerpt': 'Saturn\'s transit through Pisces brings significant changes. Learn how it affects your sign...',
         'date': '2026-08-02',
         'category': 'Transits',
-        'read_time': '8 min'
+        'read_time': '8 min',
+        'content': [
+            'Saturn — Shani — is the great teacher of the zodiac. Slow, serious, and relentless, Saturn does not bring shortcuts. It brings discipline, structure, and the hard-won rewards that come from consistent effort. When Saturn changes signs, its lessons move into a new area of your life, and 2026 is one of those significant years.',
+            'Saturn\'s transit is a long-term event. It spends roughly 2.5 years in each sign, which means its influence is felt in seasons rather than moments. Saturn also goes retrograde for about 4-5 months each year, reviewing the lessons it has been teaching.',
+            'Saturn represents responsibility, career, delays, boundaries, and karma. In a favourable position, it grants stability, authority, and longevity — think of politicians, scientists, and long-lived institutions. In a challenging position, it brings obstacles, depression, and delays, forcing you to rebuild on firmer ground.',
+            'For each Moon sign, Saturn\'s transit has a specific meaning. When it passes through your 1st house, it tests your identity and confidence — a time to be humble and work on yourself. Through your 4th house, it brings home and family responsibilities. Through your 10th house, it is the classic Sade Sati-adjacent period for career — demanding but capable of huge professional growth.',
+            'The most feared period is the Sade Sati — the seven-and-a-half years when Saturn transits the 12th, 1st, and 2nd houses from your natal Moon. It is not a curse. It is a period of karmic clearing that, handled with patience, humility, and hard work, produces enormous spiritual and material growth.',
+            'Whether Saturn\'s transit feels like a weight or a foundation depends largely on you. Respect deadlines, honour elders, stay patient with slow progress, and Saturn rewards you with the most durable success in the zodiac. Check our daily horoscope and transit section for sign-specific updates throughout 2026.'
+        ]
     },
     {
         'id': 'navamsha-chart-importance',
@@ -270,7 +301,15 @@ BLOG_POSTS = [
         'excerpt': 'The Navamsha (D9) chart reveals your true destiny, marriage potential, and spiritual path...',
         'date': '2026-07-28',
         'category': 'Charts',
-        'read_time': '6 min'
+        'read_time': '6 min',
+        'content': [
+            'The Navamsha (D9) chart is often called the "fruit of the tree" in Vedic astrology. Your birth chart (D1) is the tree — it shows the circumstances of your life. The Navamsha shows the fruit — the actual results, the inner life, and the strength of your destiny.',
+            'The Navamsha is created by dividing each sign into nine equal parts of 3 degrees and 20 minutes each. Each of these parts is then mapped into a new chart. The result is a deeply personal chart that reveals the quality of your relationships, the true strength of your planets, and your spiritual evolution.',
+            'In matters of marriage, the Navamsha is indispensable. It is considered the chart of the spouse and of marriage itself. The 7th house of the Navamsha, the position of Venus (for men) or Jupiter (for women), and the 7th lord all describe the nature of your partner and your married life. Matching charts for marriage — the famous Ashtakoota matching — is incomplete without considering the Navamsha.',
+            'The Navamsha also reveals the hidden strength of your planets. A planet that appears weak in the birth chart but is strong in the Navamsha often delivers results against the odds. Conversely, a planet that looks strong in the birth chart but is debilitated in the Navamsha frequently disappoints.',
+            'When a planet occupies the same sign in both the birth chart and the Navamsha, it is called Vargottama. This is a mark of great strength and purity — the planet\'s energy is focused and unimpeded. Our kundli calculator automatically flags Vargottama planets in your chart, a feature many paid tools lack.',
+            'Astrologers of every tradition agree: a reading that ignores the Navamsha is only half a reading. If you want to understand not just what happens to you, but who you are becoming, look to the Navamsha. Your birth chart shows the script; the Navamsha shows the soul.'
+        ]
     },
     {
         'id': 'marriage-compatibility-factors',
@@ -278,7 +317,79 @@ BLOG_POSTS = [
         'excerpt': 'Real Vedic compatibility analysis considers 8+ factors. Learn what actually matters...',
         'date': '2026-07-25',
         'category': 'Relationships',
-        'read_time': '7 min'
+        'read_time': '7 min',
+        'content': [
+            'If you have ever had your kundli "matched" before marriage, you know the process involves a score — the famous 36 gunas. But the Ashtakoota matching system, as it is properly called, is only the first layer of a proper compatibility analysis, and it is widely misunderstood.',
+            'The Ashtakoota system compares the Moon positions (and other factors) of the bride and groom across eight categories, awarding points that total to 36. A score of 18 or more is traditionally considered acceptable for marriage. But a good score alone does not guarantee a happy marriage, and a low score is not necessarily a sentence of doom.',
+            'Why? Because marriage in Vedic astrology is a much larger story. The 7th house of each chart, the 7th lord, Venus and Jupiter as natural karakas of marriage, the Navamsha chart, and the dasha periods all must be weighed together. Two charts with perfect gunas scores but conflicting 7th houses may still struggle.',
+            'The Mangalik (Mangal Dosha) consideration is another layer. Mars in certain houses (1st, 2nd, 4th, 7th, 8th, 12th from lagna, Moon, or Venus) creates Mangal Dosha. A common rule says two Mangliks or two non-Mangliks match well, while mixing them creates friction. But modern astrologers examine the strength of Mars and the overall chart before making any judgment.',
+            'Beyond doshas and gunas, what truly matters is practical alignment: similar life goals, financial habits, family values, and communication styles. Astrology can reveal whether two people\'s planetary rhythms will support each other or pull apart, but a marriage is built by two people, not by two charts.',
+            'Our compatibility calculator gives you a thoughtful, chart-based view of how two signs interact — by element, ruling planet, and natural affinity. Use it as one thoughtful input to your decision, and remember: the best match is the one where both people choose each other, every day.'
+        ]
+    },
+    {
+        'id': 'lagna-the-ascendant-explained',
+        'title': 'Your Lagna (Ascendant): The Face You Show the World',
+        'excerpt': 'The rising sign shapes your personality, body, and how others perceive you. Learn what it means...',
+        'date': '2026-07-20',
+        'category': 'Basics',
+        'read_time': '5 min',
+        'content': [
+            'In Vedic astrology, the Lagna — or Ascendant — is the sign rising on the eastern horizon at your exact moment of birth. It is, quite literally, your first impression on the world, and it is the foundation of the entire birth chart.',
+            'The Lagna changes approximately every two hours, which is why your birth time is so precious. Two people born the same day but four hours apart can have completely different Ascendants — and therefore completely different life structures, even with the same planets.',
+            'Each Lagna gives a distinct flavour. Aries Lagna: bold, direct, pioneering. Taurus Lagna: steady, sensual, patient. Gemini Lagna: curious, quick, communicative. Cancer Lagna: protective, emotional, intuitive. Leo Lagna: proud, warm, magnetic. And so on through all twelve signs.',
+            'The Lagna determines which house each planet rules in your chart, and house rulership changes everything. For example, if you are an Aries Lagna, Mars rules your 1st and 8th houses. If you are a Libra Lagna, Mars rules your 4th and 9th houses. Same planet, completely different life areas.',
+            'Your Lagna also sets the tone for your physical body and vitality. Vedic texts describe each Lagna\'s characteristic build, complexion, and temperament. The Lagna lord — the planet ruling your Ascendant sign — is among the most important planets in your chart, second only to the Moon.',
+            'Find your Lagna with our free kundli calculator. Enter your birth time accurately — even ten minutes can change the Ascendant — and discover the face you show the world, the body you inhabit, and the life-house you are building.'
+        ]
+    },
+    {
+        'id': 'gemstones-for-planets',
+        'title': 'Gemstones for the Nine Planets: Which Stone Is Right for You?',
+        'excerpt': 'Rubies for the Sun, pearls for the Moon, sapphires for Saturn... a practical guide to Vedic gemstones...',
+        'date': '2026-07-15',
+        'category': 'Remedies',
+        'read_time': '6 min',
+        'content': [
+            'Gemstone therapy is one of the most popular remedies in Vedic astrology. The idea is simple: each planet resonates with a specific gemstone, and wearing the right stone strengthens the planet in your chart, bringing out its beneficial qualities.',
+            'The Sun (Surya) resonates with the ruby (Manikya). A strong Sun brings confidence, leadership, and vitality — the ruby is worn to strengthen self-esteem and authority. The Moon resonates with the natural pearl (Moti), which calms the mind, supports emotional balance, and strengthens intuition.',
+            'Mars (Mangal) corresponds to the red coral (Moonga), a stone of courage, energy, and protection. Mercury (Budh) resonates with the emerald (Panna), enhancing intellect, communication, and business acumen. Jupiter (Guru) is linked to yellow sapphire (Pukhraj), the great blessing stone for wisdom, fortune, and education.',
+            'Venus (Shukra) resonates with the diamond (Heera), which brings beauty, luxury, and harmony to relationships. Saturn (Shani) is associated with blue sapphire (Neelam) — a powerful and demanding stone that grants discipline, patience, and karmic reward. Rahu connects with hessonite (Gomed), and Ketu with cat\'s eye (Lehsunia).',
+            'The critical warning: do not wear a gemstone without professional guidance. A stone worn for the wrong planet, or when that planet is already strong or malefic in your chart, can produce the opposite effect. Blue sapphire, in particular, is notoriously unpredictable and can shake a life it does not support.',
+            'A qualified astrologer will examine your dasha (which planet is currently running), the planet\'s strength and placement, and the correct metal (gold, silver, or panchdhatu), the correct finger, and the best day to wear the stone. Gemstones are powerful tools — treat them with the respect they deserve.'
+        ]
+    },
+    {
+        'id': 'sade-sati-guide',
+        'title': 'Sade Sati: Saturn\'s Seven-and-a-Half Years, Demystified',
+        'excerpt': 'The most feared period in Indian astrology is actually a powerful opportunity. Here\'s how to thrive...',
+        'date': '2026-07-10',
+        'category': 'Transits',
+        'read_time': '8 min',
+        'content': [
+            'Sade Sati — "the seven and a half" — refers to the roughly 7.5-year period when Saturn transits the 12th, 1st, and 2nd houses from your natal Moon. It is the most discussed and most feared period in Indian astrology, and it deserves a clearer, more honest explanation.',
+            'The three phases each last about 2.5 years. In the first phase (12th house from Moon), Saturn brings losses, expenses, and a feeling of separation — you may feel cut off from the world. In the second phase (1st house from Moon), the most intense, Saturn sits on your Moon, directly pressuring your mind, emotions, and self. In the third phase (2nd house from Moon), the pressure shifts to your finances, family, and speech, and the period winds down.',
+            'Why does Sade Sati get such a bad reputation? Because Saturn is the karmic taskmaster, and during Sade Sati it audits your life. Weaknesses surface: poor health habits, financial carelessness, broken relationships, and unfulfilled responsibilities. It is not a punishment — it is an audit, and audits are painful only when the books are in disorder.',
+            'Saturn\'s effect depends enormously on its placement and strength in your birth chart. For some, Sade Sati is a time of sudden promotion and public recognition. For others, it is a quiet period of illness, delays, and introspection. The difference lies partly in your chart and partly in how you respond.',
+            'How to thrive during Sade Sati: serve others, especially the underprivileged and the elderly (Saturn\'s favourites). Be scrupulous with money and promises. Slow down — Saturn rewards patience, not speed. Maintain a simple routine, honour your parents, and avoid shortcuts. Many astrologers recommend simple Saturn remedies like lighting a sesame oil lamp on Saturdays and chanting the Shani mantra.',
+            'Here is the liberating truth: some of the greatest achievements in people\'s lives happen during Sade Sati. Careers are built, debts are cleared, bodies are healed, and characters are forged in that crucible. If you are in your Sade Sati now, or approaching it, do not fear it — prepare for it. Our kundli tool shows your current dasha and transits so you can walk this period with awareness.'
+        ]
+    },
+    {
+        'id': 'rise-of-vedic-astrology',
+        'title': 'Why Vedic Astrology Is Experiencing a Global Renaissance',
+        'excerpt': 'From Silicon Valley to Bollywood, Jyotish is booming. Here\'s why ancient wisdom is trending again...',
+        'date': '2026-07-05',
+        'category': 'Culture',
+        'read_time': '5 min',
+        'content': [
+            'Vedic astrology — Jyotish, "the science of light" — is one of the oldest continuous intellectual traditions on Earth, with roots stretching back thousands of years in the Indian subcontinent. And right now, it is experiencing an extraordinary global resurgence.',
+            'Part of the appeal is precision. Unlike the popular Sun-sign horoscopes of Western columns, Vedic astrology is a deeply technical system. It uses the sidereal zodiac based on the actual, fixed positions of the stars, calculates exact planetary degrees with precision ephemeris data, and builds its predictions on layered systems like the Vimshottari dasha and the Navamsha chart.',
+            'The modern world is hungry for meaning. In an age of algorithms and uncertainty, people are turning to systems that offer structure to their stories. Vedic astrology offers a framework that explains not just personality, but timing — when to act, when to wait, which seasons of life favour which efforts.',
+            'The pandemic years accelerated this. Confronted with mortality and uncertainty, millions rediscovered practices — meditation, Ayurveda, yoga, and astrology — that treat the person as a whole: body, mind, and destiny. Jyotish is the map-making part of that toolkit.',
+            'From celebrity astrologers with millions of followers to data scientists who appreciate its computational rigour, the audience for Vedic astrology is expanding and maturing. The best of the new wave blends the old wisdom with modern precision — exactly what we try to do here at Vedic Astro.',
+            'If you are new to this tradition, you are arriving at a beautiful moment. The knowledge is more accessible than ever, and the tools — like the one you are using right now — make a deep and ancient system available to anyone with a date, a time, and a place of birth.'
+        ]
     }
 ]
 
@@ -589,6 +700,7 @@ def calculate():
         if email and re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
             lead_data = {
                 'timestamp': datetime.now().isoformat(),
+                'status': 'new',
                 'email': email,
                 'name': name,
                 'birth': {'year': year, 'month': month, 'day': day,
@@ -716,6 +828,69 @@ def export_leads():
         ])
     return Response(output.getvalue(), mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment; filename=leads.csv'})
+
+@app.route('/admin/update_lead', methods=['POST'])
+def update_lead():
+    if not session.get('admin_ok'):
+        abort(401)
+    data = request.json or {}
+    idx = data.get('index')
+    status = sanitize_string(data.get('status', ''), max_length=20)
+    if idx is None or status not in ('new', 'contacted', 'paid', 'delivered'):
+        return jsonify({'success': False, 'error': 'Invalid request'}), 400
+    leads = load_leads()
+    try:
+        idx = int(idx)
+        if 0 <= idx < len(leads):
+            leads[idx]['status'] = status
+            with open(LEADS_FILE, 'w', encoding='utf-8') as f:
+                json.dump(leads, f, indent=2, ensure_ascii=False)
+            return jsonify({'success': True})
+    except Exception:
+        pass
+    return jsonify({'success': False, 'error': 'Lead not found'}), 400
+
+@app.route('/admin/update_payment', methods=['POST'])
+def update_payment():
+    if not session.get('admin_ok'):
+        abort(401)
+    data = request.json or {}
+    idx = data.get('index')
+    status = sanitize_string(data.get('status', ''), max_length=20)
+    if idx is None or status not in ('pending', 'paid', 'delivered', 'refunded'):
+        return jsonify({'success': False, 'error': 'Invalid request'}), 400
+    payments = load_payments()
+    try:
+        idx = int(idx)
+        if 0 <= idx < len(payments):
+            payments[idx]['status'] = status
+            with open(PAYMENTS_FILE, 'w', encoding='utf-8') as f:
+                json.dump(payments, f, indent=2, ensure_ascii=False)
+            return jsonify({'success': True})
+    except Exception:
+        pass
+    return jsonify({'success': False, 'error': 'Payment not found'}), 400
+
+@app.route('/admin/export_payments')
+def export_payments():
+    if not session.get('admin_ok'):
+        abort(401)
+    payments = load_payments()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Timestamp', 'Name', 'Email', 'Plan', 'Amount INR', 'Method', 'Status'])
+    for p in payments:
+        writer.writerow([
+            p.get('timestamp', ''),
+            p.get('name', ''),
+            p.get('email', ''),
+            p.get('plan', ''),
+            p.get('amount_inr', ''),
+            p.get('payment_method', ''),
+            p.get('status', '')
+        ])
+    return Response(output.getvalue(), mimetype='text/csv',
+                    headers={'Content-Disposition': 'attachment; filename=payments.csv'})
 
 # === PAYMENT ROUTES ===
 @app.route('/checkout')

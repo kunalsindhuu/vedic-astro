@@ -116,17 +116,35 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 60px;
     align-items: center;
-    padding: 80px 0;
+    padding: 90px 0;
     position: relative;
+}
+
+.hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    margin-bottom: 22px;
+    background: rgba(240, 192, 64, 0.1);
+    border: 1px solid rgba(240, 192, 64, 0.25);
+    border-radius: 100px;
+    color: var(--primary);
+    font-size: 0.85em;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 
 .hero h1 {
     font-family: 'Cinzel', serif;
-    font-size: 3.2em;
-    color: var(--primary);
+    font-size: 3.4em;
     margin-bottom: 20px;
-    line-height: 1.2;
-    color: var(--primary);
+    line-height: 1.18;
+    background: linear-gradient(135deg, #f8e08a 0%, var(--primary) 40%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero p {
@@ -274,6 +292,17 @@ body {
     font-size: 1.8em;
     color: var(--primary);
     margin-bottom: 8px;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    margin: 14px auto 0;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    border-radius: 3px;
 }
 
 .section-desc { text-align: center; color: var(--text-muted); margin-bottom: 32px; }
@@ -296,12 +325,27 @@ body {
     padding: 24px;
     text-align: center;
     transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
 .feature-card:hover {
     border-color: var(--primary);
     transform: translateY(-4px);
+    box-shadow: 0 10px 40px rgba(240, 192, 64, 0.1);
 }
+
+.feature-card:hover::before { opacity: 1; }
 
 .feature-icon { font-size: 2em; display: block; margin-bottom: 12px; }
 .feature-card h3 { color: var(--primary); margin-bottom: 8px; }
@@ -384,6 +428,17 @@ body {
     font-size: 1.8em;
     color: var(--primary);
     margin-bottom: 8px;
+    position: relative;
+}
+
+.cta-section h2::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 3px;
+    margin: 14px auto 0;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    border-radius: 3px;
 }
 
 .cta-section p { color: var(--text-muted); margin-bottom: 20px; }

@@ -5,7 +5,7 @@
 {% block content %}
 <div class="page-header">
     <h1>Admin Dashboard</h1>
-    <p>View your collected leads</p>
+    <p>View and manage your leads and payments</p>
 </div>
 
 {% if not admin_ok %}
@@ -26,13 +26,13 @@
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <h2>Leads ({{ leads|length }})</h2>
         <div>
-            <a class="btn-primary" href="/admin/export">Export CSV</a>
+            <a class="btn-primary" href="/admin/export">Export Leads</a>
+            <a class="btn-secondary" href="/admin/export_payments">Export Payments</a>
             <a class="btn-secondary" href="/admin/logout" style="margin-left: 8px;">Logout</a>
         </div>
     </div>
     {% if leads %}
     <div style="overflow-x: auto; margin-top: 15px;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
             <thead>
                 <tr>
@@ -43,6 +43,7 @@
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">City</th>
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Asc</th>
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Sun</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,6 +58,13 @@
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.birth.city }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.ascendant }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.sun_sign }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                        <select class="lead-status" data-index="{{ loop.index0 }}" onchange="updateLeadStatus(this)">
+                            {% for s in ['new', 'contacted', 'paid', 'delivered'] %}
+                            <option value="{{ s }}" {% if l.status == s %}selected{% endif %}>{{ s|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -68,10 +76,10 @@
 </div>
 
 <div class="card" style="margin-top: 20px;">
-    <h2>Payments ({{ payments|length }})</h2>
-    <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px;">
-        Customers who requested a plan. Contact them to collect payment and deliver the report.
-    </p>
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h2>Payments ({{ payments|length }})</h2>
+        <p style="font-size: 0.9em; color: var(--text-muted);">Mark as paid once you receive money, delivered after sending the report.</p>
+    </div>
     {% if payments %}
     <div style="overflow-x: auto;">
         <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
@@ -95,7 +103,13 @@
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.plan }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">₹{{ p.amount_inr }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.payment_method }}</td>
-                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.status }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                        <select class="payment-status" data-index="{{ loop.index0 }}" onchange="updatePaymentStatus(this)">
+                            {% for s in ['pending', 'paid', 'delivered', 'refunded'] %}
+                            <option value="{{ s }}" {% if p.status == s %}selected{% endif %}>{{ s|capitalize }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -106,4 +120,25 @@
     {% endif %}
 </div>
 {% endif %}
+
+<script>
+function updateLeadStatus(el) {
+    fetch('/admin/update_lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index: el.dataset.index, status: el.value })
+    }).then(r => r.json()).then(d => {
+        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
+    });
+}
+function updatePaymentStatus(el) {
+    fetch('/admin/update_payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index: el.dataset.index, status: el.value })
+    }).then(r => r.json()).then(d => {
+        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
+    });
+}
+</script>
 {% endblock %}

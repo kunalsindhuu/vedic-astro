@@ -15,11 +15,9 @@
     </div>
     <h1>{{ post.title }}</h1>
     <div class="blog-content">
-        <p>{{ post.excerpt }}</p>
-        <br>
-        <p>This is a sample blog post. In a full implementation, this would contain the complete article with detailed information about {{ post.category }}.</p>
-        <br>
-        <p>Would you like me to write full content for these blog posts? I can create comprehensive articles about Vedic astrology topics that will help with SEO and establishing authority.</p>
+        {% for paragraph in post.content %}
+        <p>{{ paragraph }}</p>
+        {% endfor %}
     </div>
 </article>
 

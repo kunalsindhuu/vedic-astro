@@ -253,22 +253,24 @@ function displayResults(data) {
         document.getElementById('vargottama-badge').classList.remove('hidden');
     }
 
-    // Planet Table
-    const tbody = document.querySelector('#planet-table tbody');
-    tbody.innerHTML = '';
-    data.planets.forEach(p => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${PLANET_SYMBOLS[p.name]} ${p.name}</strong></td>
-            <td>${SIGN_SHORT[SIGN_NAMES.indexOf(p.sign)]} ${p.sign}</td>
-            <td>${p.deg}°</td>
-            <td>${p.house}</td>
-            <td class="${p.retro ? 'retro' : ''}">${p.retro ? '◐ Retro' : 'Direct'}</td>
-            <td>${SIGN_SHORT[SIGN_NAMES.indexOf(p.navamsha_sign)]}</td>
-            <td class="${p.vargotta ? 'vargotta' : ''}">${p.vargotta ? '✓' : ''}</td>
-        `;
-        tbody.appendChild(row);
-    });
+    // Planet Table (if present)
+    const planetTbody = document.querySelector('#planet-table tbody');
+    if (planetTbody) {
+        planetTbody.innerHTML = '';
+        data.planets.forEach(p => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td><strong>${PLANET_SYMBOLS[p.name]} ${p.name}</strong></td>
+                <td>${SIGN_SHORT[SIGN_NAMES.indexOf(p.sign)]} ${p.sign}</td>
+                <td>${p.deg}°</td>
+                <td>${p.house}</td>
+                <td class="${p.retro ? 'retro' : ''}">${p.retro ? '◐ Retro' : 'Direct'}</td>
+                <td>${SIGN_SHORT[SIGN_NAMES.indexOf(p.navamsha_sign)]}</td>
+                <td class="${p.vargotta ? 'vargotta' : ''}">${p.vargotta ? '✓' : ''}</td>
+            `;
+            planetTbody.appendChild(row);
+        });
+    }
 
     renderNorthChart(data);
     renderSouthChart(data);

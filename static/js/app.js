@@ -659,7 +659,75 @@ function calculateLuckyAttributes(data) {
     document.getElementById('lucky-direction-name').textContent = dirInfo.name;
 }
 
-// Contact form
+// Checkout / Razorpay
+const checkoutForm = document.getElementById('checkout-form');
+if (checkoutForm) {
+    checkoutForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('pay-btn');
+        const name = document.getElementById('pay-name').value;
+        const email = document.getElementById('pay-email').value;
+        const plan = document.getElementById('pay-plan').value;
+        if (!name) { alert('Please enter your name'); return; }
+        if (!email) { alert('Please enter your email'); return; }
+
+        btn.disabled = true;
+        btn.textContent = 'Processing...';
+        try {
+            const res = await fetch('/api/payment/order', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, email: email, plan: plan })
+            });
+            const order = await res.json();
+            if (!order.success) {
+                alert('Error: ' + (order.error || 'Could not create order'));
+                btn.disabled = false; btn.textContent = 'Pay Now';
+                return;
+            }
+            const rzp = new Razorpay({
+                key: order.key_id,
+                amount: order.amount,
+                currency: order.currency,
+                name: 'Vedic Astro',
+                description: order.plan,
+                prefill: { name: name, email: email },
+                handler: async function(response) {
+                    const verify = await fetch('/api/payment/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            order_id: response.razorpay_order_id,
+                            payment_id: response.razorpay_payment_id,
+                            signature: response.razorpay_signature,
+                            plan: plan, name: name, email: email
+                        })
+                    });
+                    const vres = await verify.json();
+                    if (vres.success) {
+                        document.getElementById('checkout-form').style.display = 'none';
+                        document.getElementById('payment-result').style.display = 'block';
+                        document.getElementById('payment-result-msg').textContent =
+                            'Thank you ' + name + '! Your ' + vres.plan + ' report will be sent to ' + email + ' within 24 hours.';
+                    } else {
+                        alert('Payment recorded but verification pending: ' + (vres.error || ''));
+                    }
+                },
+                modal: {
+                    ondismiss: function() {
+                        btn.disabled = false;
+                        btn.textContent = 'Pay Now';
+                    }
+                }
+            });
+            rzp.open();
+        } catch (err) {
+            alert('Error connecting to payment. Please try again.');
+            btn.disabled = false;
+            btn.textContent = 'Pay Now';
+        }
+    });
+}
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {

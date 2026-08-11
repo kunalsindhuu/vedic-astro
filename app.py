@@ -11,6 +11,11 @@ from datetime import datetime
 import json
 import time
 import smtplib
+import hashlib
+import hmac
+import urllib.parse
+import urllib.request
+import uuid
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
@@ -29,6 +34,46 @@ SMTP_HOST = 'smtp.gmail.com'
 SMTP_PORT = 587
 SMTP_USER = os.environ.get('SMTP_USER', CONTACT_EMAIL)
 SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
+
+# === RAZORPAY SETTINGS ===
+RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', '')
+RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '')
+RAZORPAY_API = 'https://api.razorpay.com/v1'
+
+PRICING = {
+    'premium': {'inr': 999, 'usd': 9.99, 'name': 'Premium Kundli', 'inoise': '₹999 or $9.99'},
+    'consultation': {'inr': 4999, 'usd': 49.99, 'name': 'Consultation', 'inoise': '₹4999 or $49.99'},
+}
+
+PAYMENTS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'payments.json')
+
+def load_payments():
+    if not os.path.exists(PAYMENTS_FILE):
+        return []
+    try:
+        with open(PAYMENTS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+def save_payment(payment):
+    payments = load_payments()
+    payments.append(payment)
+    with open(PAYMENTS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(payments, f, indent=2, ensure_ascii=False)
+    return len(payments)
+
+def rz_request(method, path, data=None):
+    """Low-level Razorpay API helper"""
+    url = RAZORPAY_API + path
+    body = urllib.parse.urlencode(data).encode() if data else None
+    req = urllib.request.Request(url, data=body, method=method)
+    import base64
+    auth = base64.b64encode(f'{RAZORPAY_KEY_ID}:{RAZORPAY_KEY_SECRET}'.encode()).decode()
+    req.add_header('Authorization', 'Basic ' + auth)
+    req.add_header('Content-Type', 'application/x-www-form-urlencoded')
+    with urllib.request.urlopen(req, timeout=20) as resp:
+        return json.loads(resp.read().decode())
 
 def load_leads():
     if not os.path.exists(LEADS_FILE):
@@ -639,7 +684,8 @@ def admin():
         return render_template('admin.html', error=None)
 
     leads = load_leads()
-    return render_template('admin.html', admin_ok=True, leads=leads)
+    payments = load_payments()
+    return render_template('admin.html', admin_ok=True, leads=leads, payments=payments)
 
 @app.route('/admin/logout')
 def admin_logout():
@@ -670,6 +716,75 @@ def export_leads():
         ])
     return Response(output.getvalue(), mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment; filename=leads.csv'})
+
+# === PAYMENT ROUTES ===
+@app.route('/checkout')
+def checkout_page():
+    return render_template('checkout.html')
+
+@app.route('/api/payment/order', methods=['POST'])
+@limiter.limit("20 per minute")
+def create_order():
+    if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
+        return jsonify({'success': False, 'error': 'Payments not configured'}), 503
+    data = request.json or {}
+    plan = sanitize_string(data.get('plan', 'premium'), max_length=20)
+    if plan not in PRICING:
+        plan = 'premium'
+    name = sanitize_string(data.get('name', ''), max_length=50)
+    email = sanitize_string(data.get('email', ''), max_length=100)
+    if not name or not email or not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        return jsonify({'success': False, 'error': 'Name and valid email required'}), 400
+    try:
+        amt = PRICING[plan]['inr'] * 100
+        receipt = 'va_' + uuid.uuid4().hex[:10]
+        order = rz_request('POST', '/orders', {
+            'amount': str(amt), 'currency': 'INR',
+            'receipt': receipt, 'notes[name]': name, 'notes[email]': email,
+        })
+        return jsonify({
+            'success': True,
+            'order_id': order['id'],
+            'amount': order['amount'],
+            'currency': order['currency'],
+            'key_id': RAZORPAY_KEY_ID,
+            'plan': PRICING[plan]['name'],
+            'plan_key': plan,
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+@app.route('/api/payment/verify', methods=['POST'])
+def verify_payment():
+    data = request.json or {}
+    order_id = sanitize_string(data.get('order_id', ''), max_length=50)
+    payment_id = sanitize_string(data.get('payment_id', ''), max_length=50)
+    signature = sanitize_string(data.get('signature', ''), max_length=200)
+    plan_key = sanitize_string(data.get('plan', 'premium'), max_length=20)
+    name = sanitize_string(data.get('name', ''), max_length=50)
+    email = sanitize_string(data.get('email', ''), max_length=100)
+    if plan_key not in PRICING:
+        plan_key = 'premium'
+    if not (order_id and payment_id and signature):
+        return jsonify({'success': False, 'error': 'Missing payment data'}), 400
+    try:
+        expected = hmac.new(RAZORPAY_KEY_SECRET.encode(), f'{order_id}|{payment_id}'.encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected, signature):
+            return jsonify({'success': False, 'error': 'Invalid signature'}), 400
+        plan = PRICING[plan_key]
+        count = save_payment({
+            'timestamp': datetime.now().isoformat(),
+            'payment_id': payment_id,
+            'order_id': order_id,
+            'plan': plan['name'],
+            'amount_inr': plan['inr'],
+            'amount_usd': plan['usd'],
+            'email': email,
+            'name': name,
+        })
+        return jsonify({'success': True, 'plan': plan['name']})
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

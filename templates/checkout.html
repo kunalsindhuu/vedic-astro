@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - Vedic Astro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Checkout</h1>
+    <p>Choose your plan and complete payment securely</p>
+</div>
+
+<div class="contact-grid">
+    <div class="card contact-form">
+        <h2>Order Details</h2>
+        <form id="checkout-form">
+            <div class="form-group">
+                <label for="pay-name">Your Full Name</label>
+                <input type="text" id="pay-name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="pay-email">Your Email</label>
+                <input type="email" id="pay-email" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+                <label for="pay-plan">Select Plan</label>
+                <select id="pay-plan">
+                    <option value="premium">Premium Kundli — ₹999 ($9.99)</option>
+                    <option value="consultation">Consultation — ₹4,999 ($49.99)</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" id="pay-btn">Pay Now</button>
+        </form>
+        <p style="margin-top: 12px; font-size: 0.9em; color: var(--text-muted);">
+            Secured by Razorpay. Pay via UPI, cards, netbanking, or wallets.
+        </p>
+    </div>
+
+    <div class="contact-info">
+        <div class="card">
+            <h3>What You Get</h3>
+            <div class="info-item"><span class="info-icon">📄</span><div><strong>Detailed Report</strong><p>Full personalized kundli report</p></div></div>
+            <div class="info-item"><span class="info-icon">✉️</span><div><strong>Email Delivery</strong><p>Report sent to your email within 24 hours</p></div></div>
+            <div class="info-item"><span class="info-icon">💬</span><div><strong>Consultation</strong><p>60-min video call for the consultation plan</p></div></div>
+            <div class="info-item"><span class="info-icon">🛡️</span><div><strong>Secure Payment</strong><p>100% secure via Razorpay</p></div></div>
+        </div>
+    </div>
+</div>
+
+<div id="payment-result" style="display:none;">
+    <div class="card email-confirmation">
+        <div class="email-confirmation-content">
+            <span class="email-icon">✅</span>
+            <h3 id="payment-result-title">Payment Received!</h3>
+            <p id="payment-result-msg">Thank you! Your detailed report will be sent to your email within 24 hours.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endblock %}

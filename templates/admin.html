@@ -8,7 +8,7 @@
     <p>View your collected leads</p>
 </div>
 
-{% if not password_ok %}
+{% if not admin_ok %}
 <div class="card" style="max-width: 400px; margin: 0 auto;">
     <h2>Login</h2>
     {% if error %}<p style="color: #e74c3c;">{{ error }}</p>{% endif %}
@@ -19,13 +19,16 @@
         </div>
         <button type="submit" class="btn-primary">Login</button>
     </form>
-    <p style="margin-top: 15px; font-size: 0.9em;">Default password: <code>vedicadmin123</code></p>
+    <p style="margin-top: 15px; font-size: 0.9em;">Password is set via the <code>LEAD_PASSWORD</code> environment variable.</p>
 </div>
 {% else %}
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <h2>Leads ({{ leads|length }})</h2>
-        <a class="btn-primary" href="/admin/export?password={{ request.args.get('password', '') }}">Export CSV</a>
+        <div>
+            <a class="btn-primary" href="/admin/export">Export CSV</a>
+            <a class="btn-secondary" href="/admin/logout" style="margin-left: 8px;">Logout</a>
+        </div>
     </div>
     {% if leads %}
     <div style="overflow-x: auto; margin-top: 15px;">

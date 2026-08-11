@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort, send_file, Response
+from flask import Flask, render_template, request, jsonify, abort, send_file, Response, session
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
@@ -104,7 +104,7 @@ Talisman(app,
 )
 
 # Secret key for sessions (if needed later)
-app.config['SECRET_KEY'] = os.urandom(32)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', os.urandom(32))
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024  # Max 16KB request size
 
 # === SECURITY HELPERS ===
@@ -626,27 +626,29 @@ def compatibility_check():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    global LEAD_PASSWORD
     if request.method == 'POST':
         submitted = request.form.get('password', '')
         if submitted == LEAD_PASSWORD:
-            special = request.form.get('special', '')
-            if special:
-                LEAD_PASSWORD = special.strip() or LEAD_PASSWORD
-                save_lead({'timestamp': datetime.now().isoformat(), 'sys': 'PASSWORD_CHANGED', 'special': 'new password saved'})
+            session['admin_ok'] = True
         else:
             return render_template('admin.html', error='Wrong password')
     elif request.args.get('password') == LEAD_PASSWORD:
-        pass
-    else:
+        session['admin_ok'] = True
+
+    if not session.get('admin_ok'):
         return render_template('admin.html', error=None)
 
     leads = load_leads()
-    return render_template('admin.html', password_ok=True, leads=leads)
+    return render_template('admin.html', admin_ok=True, leads=leads)
+
+@app.route('/admin/logout')
+def admin_logout():
+    session.pop('admin_ok', None)
+    return render_template('admin.html', admin_ok=False)
 
 @app.route('/admin/export')
 def export_leads():
-    if request.args.get('password') != LEAD_PASSWORD:
+    if not session.get('admin_ok'):
         abort(401)
     leads = load_leads()
     output = io.StringIO()

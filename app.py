@@ -10,6 +10,9 @@ import csv
 from datetime import datetime
 import json
 import time
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages')
 import swisseph as swe
@@ -20,6 +23,12 @@ app = Flask(__name__, static_folder='static', template_folder='templates')
 LEADS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'leads.json')
 LEAD_PASSWORD = os.environ.get('LEAD_PASSWORD', 'vedicadmin123')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'supportvedicastro77@gmail.com')
+
+# Gmail SMTP settings (for lead notifications)
+SMTP_HOST = 'smtp.gmail.com'
+SMTP_PORT = 587
+SMTP_USER = os.environ.get('SMTP_USER', CONTACT_EMAIL)
+SMTP_PASSWORD = os.environ.get('SMTP_PASSWORD', '')
 
 def load_leads():
     if not os.path.exists(LEADS_FILE):
@@ -36,6 +45,39 @@ def save_lead(lead):
     with open(LEADS_FILE, 'w', encoding='utf-8') as f:
         json.dump(leads, f, indent=2, ensure_ascii=False)
     return len(leads)
+
+def send_lead_email(lead):
+    """Email new lead details to the site owner (best-effort)."""
+    if not SMTP_PASSWORD:
+        return False
+    try:
+        b = lead.get('birth', {})
+        body = f"""New Kundli Lead!
+
+Name: {lead.get('name', '-')}
+Email: {lead.get('email', '-')}
+Birth: {b.get('day', '-')}/{b.get('month', '-')}/{b.get('year', '-')} {b.get('hour', '-')}:{b.get('minute', '-')}
+City: {b.get('city', '-')}
+Ascendant: {lead.get('ascendant', '-')}
+Sun Sign: {lead.get('sun_sign', '-')}
+Moon Sign: {lead.get('moon_sign', '-')}
+Dasha: {lead.get('dasha', '-')}
+
+View all leads at your admin dashboard: /admin
+"""
+        msg = MIMEMultipart()
+        msg['From'] = SMTP_USER
+        msg['To'] = CONTACT_EMAIL
+        msg['Subject'] = f"New Lead: {lead.get('name', '-')} ({lead.get('email', '-')})"
+        msg.attach(MIMEText(body, 'plain'))
+        server = smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=15)
+        server.starttls()
+        server.login(SMTP_USER, SMTP_PASSWORD)
+        server.sendmail(SMTP_USER, CONTACT_EMAIL, msg.as_string())
+        server.quit()
+        return True
+    except Exception:
+        return False
 
 # === SECURITY SETTINGS ===
 # Rate limiting - prevent abuse
@@ -497,7 +539,7 @@ def calculate():
 
         # Save lead if email provided
         if email and re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
-            save_lead({
+            lead_data = {
                 'timestamp': datetime.now().isoformat(),
                 'email': email,
                 'name': name,
@@ -507,7 +549,9 @@ def calculate():
                 'sun_sign': SIGN_NAMES[positions['Sun']['sign']],
                 'moon_sign': SIGN_NAMES[positions['Moon']['sign']],
                 'dasha': dasha.get('lord', '') if isinstance(dasha, dict) else ''
-            })
+            }
+            save_lead(lead_data)
+            send_lead_email(lead_data)
 
         result = {
             'success': True, 'name': name,

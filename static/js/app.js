@@ -160,7 +160,9 @@ function setupCityAutocomplete() {
 }
 
 // Form submission - SIMPLIFIED
-document.getElementById('birth-form').addEventListener('submit', async function(e) {
+const birthForm = document.getElementById('birth-form');
+if (birthForm) {
+birthForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     
     // Get values
@@ -221,6 +223,7 @@ document.getElementById('birth-form').addEventListener('submit', async function(
     
     document.getElementById('loading').classList.add('hidden');
 });
+}
 
 function showEmailConfirmation(email) {
     document.getElementById('email-confirmation-container').innerHTML = 

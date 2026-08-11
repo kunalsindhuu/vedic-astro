@@ -27,10 +27,21 @@
                     <option value="consultation">Consultation — ₹4,999 ($49.99)</option>
                 </select>
             </div>
-            <button type="submit" class="btn-primary" id="pay-btn">Pay Now</button>
+            <div class="form-group">
+                <label for="pay-method">Preferred Payment Option</label>
+                <select id="pay-method">
+                    <option value="upi">UPI</option>
+                    <option value="bank">Bank Transfer</option>
+                    <option value="card">Card</option>
+                    <option value="paypal">PayPal</option>
+                    <option value="other">Other</option>
+                </select>
+                <p style="margin-top: 6px; font-size: 0.9em; color: var(--text-muted);">We'll contact you with payment instructions.</p>
+            </div>
+            <button type="submit" class="btn-primary" id="pay-btn">Proceed</button>
         </form>
         <p style="margin-top: 12px; font-size: 0.9em; color: var(--text-muted);">
-            Secured by Razorpay. Pay via UPI, cards, netbanking, or wallets.
+            After you submit, we'll share payment details with you and deliver your report within 24 hours.
         </p>
     </div>
 
@@ -54,8 +65,4 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 {% endblock %}

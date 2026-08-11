@@ -659,7 +659,7 @@ function calculateLuckyAttributes(data) {
     document.getElementById('lucky-direction-name').textContent = dirInfo.name;
 }
 
-// Checkout / Razorpay
+// Checkout form - payment request (manual payment)
 const checkoutForm = document.getElementById('checkout-form');
 if (checkoutForm) {
     checkoutForm.addEventListener('submit', async (e) => {
@@ -668,63 +668,33 @@ if (checkoutForm) {
         const name = document.getElementById('pay-name').value;
         const email = document.getElementById('pay-email').value;
         const plan = document.getElementById('pay-plan').value;
+        const method = document.getElementById('pay-method').value;
         if (!name) { alert('Please enter your name'); return; }
         if (!email) { alert('Please enter your email'); return; }
 
         btn.disabled = true;
-        btn.textContent = 'Processing...';
+        btn.textContent = 'Submitting...';
         try {
-            const res = await fetch('/api/payment/order', {
+            const res = await fetch('/api/payment/request', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name, email: email, plan: plan })
+                body: JSON.stringify({ name: name, email: email, plan: plan, method: method })
             });
-            const order = await res.json();
-            if (!order.success) {
-                alert('Error: ' + (order.error || 'Could not create order'));
-                btn.disabled = false; btn.textContent = 'Pay Now';
-                return;
+            const result = await res.json();
+            if (result.success) {
+                document.getElementById('checkout-form').style.display = 'none';
+                document.getElementById('payment-result').style.display = 'block';
+                document.getElementById('payment-result-msg').textContent =
+                    'Thank you ' + name + '! We\'ll email payment instructions for the ' + result.plan +
+                    ' to ' + email + ' shortly.';
+            } else {
+                alert('Error: ' + (result.error || 'Could not submit'));
+                btn.disabled = false; btn.textContent = 'Proceed';
             }
-            const rzp = new Razorpay({
-                key: order.key_id,
-                amount: order.amount,
-                currency: order.currency,
-                name: 'Vedic Astro',
-                description: order.plan,
-                prefill: { name: name, email: email },
-                handler: async function(response) {
-                    const verify = await fetch('/api/payment/verify', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            order_id: response.razorpay_order_id,
-                            payment_id: response.razorpay_payment_id,
-                            signature: response.razorpay_signature,
-                            plan: plan, name: name, email: email
-                        })
-                    });
-                    const vres = await verify.json();
-                    if (vres.success) {
-                        document.getElementById('checkout-form').style.display = 'none';
-                        document.getElementById('payment-result').style.display = 'block';
-                        document.getElementById('payment-result-msg').textContent =
-                            'Thank you ' + name + '! Your ' + vres.plan + ' report will be sent to ' + email + ' within 24 hours.';
-                    } else {
-                        alert('Payment recorded but verification pending: ' + (vres.error || ''));
-                    }
-                },
-                modal: {
-                    ondismiss: function() {
-                        btn.disabled = false;
-                        btn.textContent = 'Pay Now';
-                    }
-                }
-            });
-            rzp.open();
         } catch (err) {
-            alert('Error connecting to payment. Please try again.');
+            alert('Error connecting to server. Please try again.');
             btn.disabled = false;
-            btn.textContent = 'Pay Now';
+            btn.textContent = 'Proceed';
         }
     });
 }

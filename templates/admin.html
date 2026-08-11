@@ -70,7 +70,7 @@
 <div class="card" style="margin-top: 20px;">
     <h2>Payments ({{ payments|length }})</h2>
     <p style="font-size: 0.9em; color: var(--text-muted); margin-bottom: 10px;">
-        Paid customers. Deliver their report to the email shown.
+        Customers who requested a plan. Contact them to collect payment and deliver the report.
     </p>
     {% if payments %}
     <div style="overflow-x: auto;">
@@ -82,7 +82,8 @@
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Email</th>
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Plan</th>
                     <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Amount</th>
-                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Payment ID</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Method</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,7 +94,8 @@
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.email }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.plan }}</td>
                     <td style="padding: 8px; border-bottom: 1px solid #eee;">₹{{ p.amount_inr }}</td>
-                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.payment_id }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.payment_method }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ p.status }}</td>
                 </tr>
             {% endfor %}
             </tbody>

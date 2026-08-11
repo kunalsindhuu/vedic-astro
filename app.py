@@ -722,69 +722,30 @@ def export_leads():
 def checkout_page():
     return render_template('checkout.html')
 
-@app.route('/api/payment/order', methods=['POST'])
+@app.route('/api/payment/request', methods=['POST'])
 @limiter.limit("20 per minute")
-def create_order():
-    if not RAZORPAY_KEY_ID or not RAZORPAY_KEY_SECRET:
-        return jsonify({'success': False, 'error': 'Payments not configured'}), 503
+def payment_request():
     data = request.json or {}
     plan = sanitize_string(data.get('plan', 'premium'), max_length=20)
     if plan not in PRICING:
         plan = 'premium'
     name = sanitize_string(data.get('name', ''), max_length=50)
     email = sanitize_string(data.get('email', ''), max_length=100)
+    method = sanitize_string(data.get('method', 'other'), max_length=20)
     if not name or not email or not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
         return jsonify({'success': False, 'error': 'Name and valid email required'}), 400
-    try:
-        amt = PRICING[plan]['inr'] * 100
-        receipt = 'va_' + uuid.uuid4().hex[:10]
-        order = rz_request('POST', '/orders', {
-            'amount': str(amt), 'currency': 'INR',
-            'receipt': receipt, 'notes[name]': name, 'notes[email]': email,
-        })
-        return jsonify({
-            'success': True,
-            'order_id': order['id'],
-            'amount': order['amount'],
-            'currency': order['currency'],
-            'key_id': RAZORPAY_KEY_ID,
-            'plan': PRICING[plan]['name'],
-            'plan_key': plan,
-        })
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-@app.route('/api/payment/verify', methods=['POST'])
-def verify_payment():
-    data = request.json or {}
-    order_id = sanitize_string(data.get('order_id', ''), max_length=50)
-    payment_id = sanitize_string(data.get('payment_id', ''), max_length=50)
-    signature = sanitize_string(data.get('signature', ''), max_length=200)
-    plan_key = sanitize_string(data.get('plan', 'premium'), max_length=20)
-    name = sanitize_string(data.get('name', ''), max_length=50)
-    email = sanitize_string(data.get('email', ''), max_length=100)
-    if plan_key not in PRICING:
-        plan_key = 'premium'
-    if not (order_id and payment_id and signature):
-        return jsonify({'success': False, 'error': 'Missing payment data'}), 400
-    try:
-        expected = hmac.new(RAZORPAY_KEY_SECRET.encode(), f'{order_id}|{payment_id}'.encode(), hashlib.sha256).hexdigest()
-        if not hmac.compare_digest(expected, signature):
-            return jsonify({'success': False, 'error': 'Invalid signature'}), 400
-        plan = PRICING[plan_key]
-        count = save_payment({
-            'timestamp': datetime.now().isoformat(),
-            'payment_id': payment_id,
-            'order_id': order_id,
-            'plan': plan['name'],
-            'amount_inr': plan['inr'],
-            'amount_usd': plan['usd'],
-            'email': email,
-            'name': name,
-        })
-        return jsonify({'success': True, 'plan': plan['name']})
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
+    plan_data = PRICING[plan]
+    count = save_payment({
+        'timestamp': datetime.now().isoformat(),
+        'status': 'pending',
+        'payment_method': method,
+        'plan': plan_data['name'],
+        'amount_inr': plan_data['inr'],
+        'amount_usd': plan_data['usd'],
+        'email': email,
+        'name': name,
+    })
+    return jsonify({'success': True, 'plan': plan_data['name'], 'id': count})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

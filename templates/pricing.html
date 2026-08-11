@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Pricing - Vedic Astro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Pricing Plans</h1>
+    <p>Choose the plan that's right for you</p>
+</div>
+
+<div class="pricing-grid">
+    <div class="pricing-card">
+        <div class="pricing-header">
+            <h3>Free</h3>
+            <div class="price">$0</div>
+            <p>Perfect for getting started</p>
+        </div>
+        <ul class="pricing-features">
+            <li>✓ Basic birth chart</li>
+            <li>✓ Planetary positions</li>
+            <li>✓ Navamsha chart</li>
+            <li>✓ Sign & house info</li>
+            <li>✗ Dasha predictions</li>
+            <li>✗ Life scores</li>
+            <li>✗ PDF report</li>
+        </ul>
+        <a href="/kundli" class="btn-secondary full">Get Started</a>
+    </div>
+
+    <div class="pricing-card popular">
+        <div class="popular-badge">Most Popular</div>
+        <div class="pricing-header">
+            <h3>Premium</h3>
+            <div class="price">$9<span>.99</span></div>
+            <p>Complete analysis</p>
+        </div>
+        <ul class="pricing-features">
+            <li>✓ Everything in Free</li>
+            <li>✓ Full Dasha timeline</li>
+            <li>✓ Life scores & analysis</li>
+            <li>✓ Yoga detection</li>
+            <li>✓ Personalized predictions</li>
+            <li>✓ PDF download</li>
+            <li>✓ Email delivery</li>
+        </ul>
+        <a href="/kundli" class="btn-primary full">Get Premium</a>
+    </div>
+
+    <div class="pricing-card">
+        <div class="pricing-header">
+            <h3>Consultation</h3>
+            <div class="price">$49<span>.99</span></div>
+            <p>Personal guidance</p>
+        </div>
+        <ul class="pricing-features">
+            <li>✓ Everything in Premium</li>
+            <li>✓ 60-min video call</li>
+            <li>✓ Personalized Q&A</li>
+            <li>✓ Remedies & guidance</li>
+            <li>✓ Session recording</li>
+            <li>✓ Follow-up email</li>
+            <li>✓ Priority support</li>
+        </ul>
+        <a href="/contact" class="btn-secondary full">Book Now</a>
+    </div>
+</div>
+
+<section class="card faq-section">
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq-grid">
+        <div class="faq-item">
+            <h4>How accurate are your calculations?</h4>
+            <p>We use Swiss Ephemeris, the same precision engine used by NASA and professional astronomers. Our calculations are accurate to arc-seconds.</p>
+        </div>
+        <div class="faq-item">
+            <h4>What is Lahiri Ayanamsa?</h4>
+            <p>Lahiri Ayanamsa is the most widely used ayanamsa in Vedic astrology. It accounts for the precession of equinoxes and is the official standard in India.</p>
+        </div>
+        <div class="faq-item">
+            <h4>Can I get a refund?</h4>
+            <p>Yes! If you're not satisfied with your premium report, contact us within 7 days for a full refund.</p>
+        </div>
+        <div class="faq-item">
+            <h4>How long does it take?</h4>
+            <p>Free report is instant. Premium reports are delivered within 5 minutes. Live consultations are scheduled at your convenience.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

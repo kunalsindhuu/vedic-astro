@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Daily Horoscope - Vedic Astro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Daily Horoscope</h1>
+    <p>Today's predictions for each zodiac sign - {{ "now"|default("August 11, 2026") }}</p>
+</div>
+
+<div class="horoscope-grid">
+    {% for sign in signs %}
+    <div class="horoscope-card" id="{{ sign }}">
+        <div class="horoscope-header">
+            <span class="horoscope-symbol">{{ ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'][loop.index0] }}</span>
+            <h3>{{ sign }}</h3>
+        </div>
+        <div class="horoscope-ratings">
+            <div class="rating">
+                <span class="rating-label">💕 Love</span>
+                <span class="stars">{{ '★' * horoscopes[sign].love }}{{ '☆' * (5 - horoscopes[sign].love) }}</span>
+            </div>
+            <div class="rating">
+                <span class="rating-label">💼 Career</span>
+                <span class="stars">{{ '★' * horoscopes[sign].career }}{{ '☆' * (5 - horoscopes[sign].career) }}</span>
+            </div>
+            <div class="rating">
+                <span class="rating-label">🏥 Health</span>
+                <span class="stars">{{ '★' * horoscopes[sign].health }}{{ '☆' * (5 - horoscopes[sign].health) }}</span>
+            </div>
+            <div class="rating">
+                <span class="rating-label">💰 Finance</span>
+                <span class="stars">{{ '★' * horoscopes[sign].finance }}{{ '☆' * (5 - horoscopes[sign].finance) }}</span>
+            </div>
+        </div>
+        <p class="horoscope-message">{{ horoscopes[sign].message }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<section class="card">
+    <h2>How to Get Personalized Predictions</h2>
+    <p>Daily horoscopes based on sun signs are general. For truly personalized predictions, you need to consider your complete birth chart including:</p>
+    <br>
+    <ul style="padding-left: 20px; line-height: 2;">
+        <li>Your exact Ascendant (Lagna)</li>
+        <li>Moon sign and Nakshatra</li>
+        <li>Current Dasha/Bhukti period</li>
+        <li>Planetary transits relative to your chart</li>
+    </ul>
+    <br>
+    <a href="/kundli" class="btn-primary">Get Your Free Birth Chart</a>
+</section>
+{% endblock %}

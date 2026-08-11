@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block title %}Vedic Astro - Authentic Birth Chart Analysis{% endblock %}
+{% block meta_desc %}Get your authentic Vedic astrology birth chart (Kundli) with real planetary calculations, Dasha predictions, and personalized insights.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1 data-i18n="hero_title">Discover Your Destiny</h1>
+        <p data-i18n="hero_subtitle">Authentic Vedic astrology powered by real planetary calculations. Get your birth chart, Dasha predictions, and personalized insights.</p>
+        <div class="hero-buttons">
+            <a href="/kundli" class="btn-primary" data-i18n="hero_btn1">Get Free Kundli</a>
+            <a href="/services" class="btn-secondary" data-i18n="hero_btn2">Our Services</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><span class="stat-number">100+</span><span class="stat-label" data-i18n="cities">Cities</span></div>
+            <div class="stat"><span class="stat-number">Real</span><span class="stat-label" data-i18n="real_calc">Real Calculations</span></div>
+            <div class="stat"><span class="stat-number">Free</span><span class="stat-label" data-i18n="free_report">Free Basic Report</span></div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="cosmic-circle">
+            <span class="zodiac-ring">♈♉♊♋♌♍♎♏♐♑♒♓</span>
+        </div>
+        <!-- 3D Planets -->
+        <div class="planet planet-1">☉</div>
+        <div class="planet planet-2">☽</div>
+        <div class="planet planet-3">♃</div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+    <h2 class="section-title" data-i18n="what_you_get">What You Get</h2>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <span class="feature-icon">🪐</span>
+            <h3 data-i18n="accurate_calc">Accurate Calculations</h3>
+            <p data-i18n="accurate_desc">Powered by Swiss Ephemeris - the same precision engine used by NASA and professional astronomers.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">📊</span>
+            <h3 data-i18n="complete_chart">Complete Birth Chart</h3>
+            <p data-i18n="complete_desc">North & South Indian Kundli, Navamsha (D9), and all planetary positions with degrees.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">⏳</span>
+            <h3 data-i18n="dasha_pred">Dasha Predictions</h3>
+            <p data-i18n="dasha_desc">Complete Vimshottari Dasha timeline showing your current and future planetary periods.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">⭐</span>
+            <h3 data-i18n="yoga_detection">Yoga Detection</h3>
+            <p data-i18n="yoga_desc">Automatic identification of powerful yogas in your chart like Raj Yogas and Dhana Yogas.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">💕</span>
+            <h3 data-i18n="compat_check">Compatibility Check</h3>
+            <p data-i18n="compat_desc">Check relationship compatibility based on Vedic astrology principles.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🌙</span>
+            <h3 data-i18n="daily_horoscope">Daily Horoscope</h3>
+            <p data-i18n="daily_desc">Daily predictions based on your moon sign with love, career, health, and finance scores.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Daily Horoscope Preview -->
+<section class="daily-preview">
+    <h2 class="section-title" data-i18n="today_horoscope">Today's Horoscope</h2>
+    <p class="section-desc" data-i18n="quick_preview">Quick preview for each zodiac sign</p>
+    <div class="zodiac-grid">
+        {% for sign in daily_horoscope %}
+        <a href="/daily-horoscope#{{ sign }}" class="zodiac-card">
+            <span class="zodiac-symbol">{{ ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'][loop.index0] }}</span>
+            <span class="zodiac-name">{{ sign }}</span>
+            <span class="zodiac-score">{{ daily_horoscope[sign].career }}/5</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <h2 class="section-title" data-i18n="how_works">How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <span class="step-number">1</span>
+            <h4 data-i18n="step1">Enter Birth Details</h4>
+            <p data-i18n="step1_desc">Provide your date, time, and place of birth</p>
+        </div>
+        <div class="step">
+            <span class="step-number">2</span>
+            <h4 data-i18n="step2">Precise Calculations</h4>
+            <p data-i18n="step2_desc">Our engine calculates planetary positions using Swiss Ephemeris</p>
+        </div>
+        <div class="step">
+            <span class="step-number">3</span>
+            <h4 data-i18n="step3">Get Your Report</h4>
+            <p data-i18n="step3_desc">Receive detailed analysis with predictions and insights</p>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials">
+    <h2 class="section-title" data-i18n="testimonials">What People Say</h2>
+    <div class="testimonial-grid">
+        <div class="testimonial-card">
+            <p>"The most accurate kundli I've ever gotten online. The Dasha predictions were spot on!"</p>
+            <span class="testimonial-author">- Priya, Mumbai</span>
+        </div>
+        <div class="testimonial-card">
+            <p>"Finally a real Vedic astrology site with actual calculations. No generic nonsense."</p>
+            <span class="testimonial-author">- Rahul, Delhi</span>
+        </div>
+        <div class="testimonial-card">
+            <p>"The compatibility report helped me understand my relationship better. Highly recommend!"</p>
+            <span class="testimonial-author">- Sarah, London</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <h2 data-i18n="ready">Ready to Discover Your Destiny?</h2>
+    <p>Get your free birth chart analysis now</p>
+    <a href="/kundli" class="btn-primary large" data-i18n="hero_btn1">Get Free Kundli</a>
+</section>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Love Compatibility - Vedic Astro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Love Compatibility</h1>
+    <p>Check relationship compatibility based on Vedic astrology</p>
+</div>
+
+<section class="card compatibility-form">
+    <h2>Enter Both Signs</h2>
+    <div class="compatibility-inputs">
+        <div class="person-input">
+            <h3>Person 1</h3>
+            <div class="form-group">
+                <label>Zodiac Sign</label>
+                <select id="sign1">
+                    {% for sign in ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'] %}
+                    <option value="{{ sign }}">{{ sign }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="compatibility-heart">💕</div>
+        <div class="person-input">
+            <h3>Person 2</h3>
+            <div class="form-group">
+                <label>Zodiac Sign</label>
+                <select id="sign2">
+                    {% for sign in ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'] %}
+                    <option value="{{ sign }}" {% if sign == 'Leo' %}selected{% endif %}>{{ sign }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <button onclick="checkCompatibility()" class="btn-primary">Check Compatibility</button>
+</section>
+
+<div id="compatibility-result" class="hidden">
+    <div class="card result-card">
+        <h2>Compatibility Result</h2>
+        <div class="compatibility-score-display">
+            <div class="score-circle" id="comp-score"></div>
+            <p id="comp-verdict"></p>
+        </div>
+        <div class="compatibility-details" id="comp-details"></div>
+    </div>
+</div>
+
+<section class="card">
+    <h2>Understanding Compatibility</h2>
+    <p>Vedic astrology considers multiple factors for relationship compatibility:</p>
+    <br>
+    <ul style="padding-left: 20px; line-height: 2;">
+        <li><strong>Element Compatibility:</strong> Fire-Air and Earth-Water pairs naturally harmonize</li>
+        <li><strong>Nakshatra Matching:</strong> Birth stars indicate emotional compatibility</li>
+        <li><strong>Manglik Dosha:</strong> Mars placement can affect relationships</li>
+        <li><strong>Navamsha Match:</strong> D9 chart compatibility is crucial for marriage</li>
+    </ul>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function checkCompatibility() {
+    const sign1 = document.getElementById('sign1').value;
+    const sign2 = document.getElementById('sign2').value;
+    
+    const res = await fetch('/api/compatibility', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sign1, sign2 })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+        document.getElementById('compatibility-result').classList.remove('hidden');
+        document.getElementById('comp-score').textContent = data.score + '%';
+        document.getElementById('comp-verdict').textContent = data.verdict;
+        document.getElementById('comp-details').innerHTML = `
+            <p><strong>${data.sign1}</strong> (${data.element1}) + <strong>${data.sign2}</strong> (${data.element2})</p>
+            <p style="margin-top:10px; color:#a0a0a0;">This is a basic elemental compatibility check. For a complete analysis including Nakshatra and Navamsha matching, get our Premium Compatibility Report.</p>
+        `;
+        document.getElementById('compatibility-result').scrollIntoView({ behavior: 'smooth' });
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Vedic Astro Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <a href="/blog" class="back-link">← Back to Blog</a>
+</div>
+
+<article class="card blog-post">
+    <div class="blog-meta">
+        <span class="blog-category">{{ post.category }}</span>
+        <span class="blog-date">{{ post.date }}</span>
+        <span class="read-time">📖 {{ post.read_time }} read</span>
+    </div>
+    <h1>{{ post.title }}</h1>
+    <div class="blog-content">
+        <p>{{ post.excerpt }}</p>
+        <br>
+        <p>This is a sample blog post. In a full implementation, this would contain the complete article with detailed information about {{ post.category }}.</p>
+        <br>
+        <p>Would you like me to write full content for these blog posts? I can create comprehensive articles about Vedic astrology topics that will help with SEO and establishing authority.</p>
+    </div>
+</article>
+
+<section class="card">
+    <h3>Related Articles</h3>
+    <div class="related-posts">
+        <a href="/blog" class="btn-secondary">View All Posts</a>
+    </div>
+</section>
+{% endblock %}

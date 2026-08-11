@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Free Kundli - Birth Chart Analysis{% endblock %}
+{% block meta_desc %}Get your free Vedic birth chart (Kundli) with accurate planetary positions, Dasha timeline, and personalized predictions.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 data-i18n="kundli">Free Kundli Analysis</h1>
+    <p data-i18n="hero_subtitle">Enter your birth details for an authentic Vedic astrology reading</p>
+</div>
+
+<!-- Input Section -->
+<section id="input-section" class="card input-card">
+    <form id="birth-form">
+        <div class="form-grid">
+            <div class="form-group full-width">
+                <label for="name" data-i18n="name_label">Full Name</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+                <label for="day">Day</label>
+                <select id="day" required>
+                    <option value="">Day</option>
+                    {% for i in range(1,32) %}<option value="{{ i }}">{{ i }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="month">Month</label>
+                <select id="month" required>
+                    <option value="">Month</option>
+                    <option value="1">Jan</option><option value="2">Feb</option>
+                    <option value="3">Mar</option><option value="4">Apr</option>
+                    <option value="5">May</option><option value="6">Jun</option>
+                    <option value="7">Jul</option><option value="8">Aug</option>
+                    <option value="9">Sep</option><option value="10">Oct</option>
+                    <option value="11">Nov</option><option value="12">Dec</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="year">Year</label>
+                <select id="year" required>
+                    <option value="">Year</option>
+                    {% for y in range(2025, 1919, -1) %}<option value="{{ y }}" {% if y == 2005 %}selected{% endif %}>{{ y }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="hour">Hour (24h)</label>
+                <select id="hour" required>
+                    <option value="">Hour</option>
+                    {% for h in range(0,24) %}<option value="{{ h }}">{{ "%02d"|format(h) }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="minute">Minute</label>
+                <select id="minute" required>
+                    <option value="">Min</option>
+                    {% for m in range(0,60) %}<option value="{{ m }}">{{ "%02d"|format(m) }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="form-group full-width">
+                <label for="city" data-i18n="city_label">City of Birth</label>
+                <input type="text" id="city" placeholder="Start typing your birth city..." list="city-list" required>
+                <datalist id="city-list"></datalist>
+                <span class="hint" data-i18n="cities">Supports 100+ cities worldwide</span>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary" data-i18n="hero_btn1">Generate My Birth Chart</button>
+    </form>
+</section>
+
+<!-- Loading -->
+<div id="loading" class="card hidden">
+    <div class="loading-content">
+        <div class="cosmic-spinner"></div>
+        <p>Calculating planetary positions...</p>
+        <p class="loading-sub">Using Swiss Ephemeris for precision</p>
+    </div>
+</div>
+
+<!-- Results -->
+<div id="results" class="hidden">
+    <div class="card summary-card">
+        <div class="summary-header">
+            <h2 id="result-name"></h2>
+            <p id="result-birth-info"></p>
+        </div>
+        <div class="summary-grid">
+            <div class="summary-item asc"><span class="summary-label">Ascendant</span><span class="summary-value" id="asc-info"></span></div>
+            <div class="summary-item moon"><span class="summary-label">Moon Sign</span><span class="summary-value" id="moon-sign"></span></div>
+            <div class="summary-item nakshatra"><span class="summary-label">Nakshatra</span><span class="summary-value" id="nakshatra"></span></div>
+            <div class="summary-item dasha"><span class="summary-label">Current Dasha</span><span class="summary-value" id="current-dasha"></span></div>
+        </div>
+        <div id="vargottama-badge" class="badge hidden">⚡ Vargottama Ascendant</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>Birth Chart</h2>
+            <div class="chart-tabs">
+                <button class="tab-btn active" onclick="showChart('north')">North Indian</button>
+                <button class="tab-btn" onclick="showChart('south')">South Indian</button>
+            </div>
+        </div>
+        <div id="north-chart" class="chart-container"></div>
+        <div id="south-chart" class="chart-container hidden"></div>
+    </div>
+
+    <div class="card">
+        <h2>Planetary Positions</h2>
+        <div class="table-responsive">
+            <table id="planet-table">
+                <thead><tr><th>Planet</th><th>Sign</th><th>Degree</th><th>House</th><th>Retro</th><th>Navamsha</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Navamsha Chart (D9)</h2>
+        <p class="card-desc">Your inner self, marriage potential, and spiritual path</p>
+        <div id="navamsha-chart" class="chart-container"></div>
+    </div>
+
+    <!-- Lucky Color & Number Section -->
+    <div class="card lucky-section">
+        <h2 data-i18n="lucky_section">🎨 Your Lucky Color & Number</h2>
+        <p class="card-desc" data-i18n="lucky_based">Based on your Ascendant lord and birth details</p>
+        <div class="lucky-grid">
+            <div class="lucky-item color-item">
+                <span class="lucky-label" data-i18n="lucky_color">Lucky Color</span>
+                <div class="lucky-color-display" id="lucky-color"></div>
+                <span class="lucky-name" id="lucky-color-name"></span>
+            </div>
+            <div class="lucky-item number-item">
+                <span class="lucky-label" data-i18n="lucky_number">Lucky Number</span>
+                <span class="lucky-number-display" id="lucky-number"></span>
+                <span class="lucky-desc" id="lucky-number-desc"></span>
+            </div>
+            <div class="lucky-item gem-item">
+                <span class="lucky-label" data-i18n="lucky_gem">Lucky Gemstone</span>
+                <span class="lucky-gem-icon" id="lucky-gem-icon">💎</span>
+                <span class="lucky-name" id="lucky-gem-name"></span>
+            </div>
+            <div class="lucky-item direction-item">
+                <span class="lucky-label" data-i18n="lucky_dir">Lucky Direction</span>
+                <span class="lucky-direction-icon" id="lucky-direction-icon">🧭</span>
+                <span class="lucky-name" id="lucky-direction-name"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="astro_yogas">Astrological Yogas</h2>
+        <div id="yogas-list"></div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="dasha_timeline">Vimshottari Dasha Timeline</h2>
+        <div class="table-responsive">
+            <table id="dasha-table">
+                <thead><tr><th>Dasha</th><th>Start</th><th>End</th><th>Duration</th><th></th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 data-i18n="life_analysis">Life Analysis</h2>
+        <div id="predictions"></div>
+    </div>
+
+    <div class="score-section">
+        <h2 data-i18n="life_scores">Life Scores</h2>
+        <div class="score-grid" id="score-grid"></div>
+    </div>
+</div>
+{% endblock %}

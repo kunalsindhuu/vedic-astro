@@ -61,30 +61,3 @@
     </ul>
 </section>
 {% endblock %}
-
-{% block scripts %}
-<script>
-async function checkCompatibility() {
-    const sign1 = document.getElementById('sign1').value;
-    const sign2 = document.getElementById('sign2').value;
-    
-    const res = await fetch('/api/compatibility', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sign1, sign2 })
-    });
-    const data = await res.json();
-    
-    if (data.success) {
-        document.getElementById('compatibility-result').classList.remove('hidden');
-        document.getElementById('comp-score').textContent = data.score + '%';
-        document.getElementById('comp-verdict').textContent = data.verdict;
-        document.getElementById('comp-details').innerHTML = `
-            <p><strong>${data.sign1}</strong> (${data.element1}) + <strong>${data.sign2}</strong> (${data.element2})</p>
-            <p style="margin-top:10px; color:#a0a0a0;">This is a basic elemental compatibility check. For a complete analysis including Nakshatra and Navamsha matching, get our Premium Compatibility Report.</p>
-        `;
-        document.getElementById('compatibility-result').scrollIntoView({ behavior: 'smooth' });
-    }
-}
-</script>
-{% endblock %}

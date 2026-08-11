@@ -40,6 +40,24 @@ RAZORPAY_KEY_ID = os.environ.get('RAZORPAY_KEY_ID', '')
 RAZORPAY_KEY_SECRET = os.environ.get('RAZORPAY_KEY_SECRET', '')
 RAZORPAY_API = 'https://api.razorpay.com/v1'
 
+FEEDBACK_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'feedback.json')
+
+def load_feedback():
+    if not os.path.exists(FEEDBACK_FILE):
+        return []
+    try:
+        with open(FEEDBACK_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+def save_feedback(item):
+    items = load_feedback()
+    items.append(item)
+    with open(FEEDBACK_FILE, 'w', encoding='utf-8') as f:
+        json.dump(items, f, indent=2, ensure_ascii=False)
+    return len(items)
+
 PRICING = {
     'premium': {'inr': 999, 'usd': 9.99, 'name': 'Premium Kundli', 'inoise': '₹999 or $9.99'},
     'consultation': {'inr': 4999, 'usd': 49.99, 'name': 'Consultation', 'inoise': '₹4999 or $49.99'},
@@ -797,7 +815,8 @@ def admin():
 
     leads = load_leads()
     payments = load_payments()
-    return render_template('admin.html', admin_ok=True, leads=leads, payments=payments)
+    feedback = load_feedback()
+    return render_template('admin.html', admin_ok=True, leads=leads, payments=payments, feedback=feedback)
 
 @app.route('/admin/logout')
 def admin_logout():
@@ -891,6 +910,46 @@ def export_payments():
         ])
     return Response(output.getvalue(), mimetype='text/csv',
                     headers={'Content-Disposition': 'attachment; filename=payments.csv'})
+
+# === FEEDBACK ROUTES ===
+@app.route('/api/feedback', methods=['POST'])
+@limiter.limit("20 per minute")
+def feedback():
+    data = request.json or {}
+    ftype = sanitize_string(data.get('type', 'suggestion'), max_length=20)
+    if ftype not in ('suggestion', 'complaint'):
+        ftype = 'suggestion'
+    email = sanitize_string(data.get('email', ''), max_length=100)
+    message = sanitize_string(data.get('message', ''), max_length=2000)
+    if not message:
+        return jsonify({'success': False, 'error': 'Message is required'}), 400
+    if email and not re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+        return jsonify({'success': False, 'error': 'Invalid email'}), 400
+    count = save_feedback({
+        'timestamp': datetime.now().isoformat(),
+        'type': ftype,
+        'email': email,
+        'message': message,
+    })
+    return jsonify({'success': True, 'id': count})
+
+@app.route('/admin/export_feedback')
+def export_feedback():
+    if not session.get('admin_ok'):
+        abort(401)
+    items = load_feedback()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Timestamp', 'Type', 'Email', 'Message'])
+    for f in items:
+        writer.writerow([
+            f.get('timestamp', ''),
+            f.get('type', ''),
+            f.get('email', ''),
+            f.get('message', '')
+        ])
+    return Response(output.getvalue(), mimetype='text/csv',
+                    headers={'Content-Disposition': 'attachment; filename=feedback.csv'})
 
 # === PAYMENT ROUTES ===
 @app.route('/checkout')

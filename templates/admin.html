@@ -119,26 +119,38 @@
     <p>No payments yet.</p>
     {% endif %}
 </div>
-{% endif %}
 
-<script>
-function updateLeadStatus(el) {
-    fetch('/admin/update_lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index: el.dataset.index, status: el.value })
-    }).then(r => r.json()).then(d => {
-        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
-    });
-}
-function updatePaymentStatus(el) {
-    fetch('/admin/update_payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ index: el.dataset.index, status: el.value })
-    }).then(r => r.json()).then(d => {
-        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
-    });
-}
-</script>
+<div class="card" style="margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h2>Suggestions & Complaints ({{ feedback|length }})</h2>
+        <a class="btn-secondary" href="/admin/export_feedback">Export Feedback</a>
+    </div>
+    {% if feedback %}
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Date</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Type</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Email</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Message</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for f in feedback %}
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ f.timestamp }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ f.type|capitalize }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ f.email or '-' }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ f.message }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No feedback yet.</p>
+    {% endif %}
+</div>
+{% endif %}
 {% endblock %}

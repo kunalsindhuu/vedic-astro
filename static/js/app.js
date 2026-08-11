@@ -698,8 +698,57 @@ if (checkoutForm) {
         }
     });
 }
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
+// Compatibility check
+async function checkCompatibility() {
+    const sign1 = document.getElementById('sign1').value;
+    const sign2 = document.getElementById('sign2').value;
+
+    try {
+        const res = await fetch('/api/compatibility', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sign1, sign2 })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            document.getElementById('compatibility-result').classList.remove('hidden');
+            document.getElementById('comp-score').textContent = data.score + '%';
+            document.getElementById('comp-verdict').textContent = data.verdict;
+            document.getElementById('comp-details').innerHTML = `
+                <p><strong>${data.sign1}</strong> (${data.element1}) + <strong>${data.sign2}</strong> (${data.element2})</p>
+                <p style="margin-top:10px; color:#a0a0a0;">This is a basic elemental compatibility check. For a complete analysis including Nakshatra and Navamsha matching, get our Premium Compatibility Report.</p>
+            `;
+            document.getElementById('compatibility-result').scrollIntoView({ behavior: 'smooth' });
+        } else {
+            alert('Error: ' + (data.error || 'Something went wrong'));
+        }
+    } catch (err) {
+        alert('Error connecting to server. Please try again.');
+    }
+}
+
+// Admin status updates
+function updateLeadStatus(el) {
+    fetch('/admin/update_lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index: el.dataset.index, status: el.value })
+    }).then(r => r.json()).then(d => {
+        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
+    });
+}
+function updatePaymentStatus(el) {
+    fetch('/admin/update_payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ index: el.dataset.index, status: el.value })
+    }).then(r => r.json()).then(d => {
+        if (d.success) { el.style.borderColor = 'var(--success, #2ecc71)'; }
+    });
+}
+
+const contactForm = document.getElementById('contact-form');if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const name = document.getElementById('contact-name').value;
@@ -711,5 +760,55 @@ if (contactForm) {
         const url = 'mailto:' + mailTo + '?subject=' + encodeURIComponent(subject) + '&body=' + body;
         window.location.href = url;
         contactForm.reset();
+    });
+}
+
+// Suggestion & Complaint forms
+function submitFeedback(type) {
+    const emailId = type === 'suggestion' ? 'suggestion-email' : 'complaint-email';
+    const messageId = type === 'suggestion' ? 'suggestion-message' : 'complaint-message';
+    const successId = type === 'suggestion' ? 'suggestion-success' : 'complaint-success';
+    const email = document.getElementById(emailId).value;
+    const message = document.getElementById(messageId).value;
+
+    if (!message.trim()) {
+        alert('Please write a message');
+        return;
+    }
+
+    fetch('/api/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: type, email: email, message: message })
+    }).then(r => r.json()).then(d => {
+        const el = document.getElementById(successId);
+        if (d.success) {
+            el.textContent = type === 'suggestion'
+                ? '✅ Thank you! Your suggestion has been received.'
+                : '✅ Thank you! Your complaint has been received. We will address it within 24 hours.';
+            el.classList.remove('hidden');
+            document.getElementById(emailId).value = '';
+            document.getElementById(messageId).value = '';
+        } else {
+            alert('Error: ' + (d.error || 'Could not submit'));
+        }
+    }).catch(() => {
+        alert('Error connecting to server. Please try again.');
+    });
+}
+
+const suggestionForm = document.getElementById('suggestion-form');
+if (suggestionForm) {
+    suggestionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitFeedback('suggestion');
+    });
+}
+
+const complaintForm = document.getElementById('complaint-form');
+if (complaintForm) {
+    complaintForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitFeedback('complaint');
     });
 }

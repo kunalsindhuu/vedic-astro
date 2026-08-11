@@ -66,4 +66,41 @@
         </div>
     </div>
 </div>
+
+<!-- Suggestion & Complaint Boxes -->
+<div class="contact-grid" style="margin-top: 20px;">
+    <div class="card contact-form">
+        <h2>💡 Suggestion Box</h2>
+        <p style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 15px;">Have an idea to improve Vedic Astro? We'd love to hear it.</p>
+        <form id="suggestion-form">
+            <div class="form-group">
+                <label for="suggestion-email">Email (optional)</label>
+                <input type="email" id="suggestion-email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="suggestion-message">Your Suggestion</label>
+                <textarea id="suggestion-message" rows="4" placeholder="Share your idea..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Submit Suggestion</button>
+        </form>
+        <div id="suggestion-success" class="hidden" style="margin-top: 15px; color: var(--accent-green);"></div>
+    </div>
+
+    <div class="card contact-form">
+        <h2>⚠️ Complaint Box</h2>
+        <p style="color: var(--text-muted); font-size: 0.9em; margin-bottom: 15px;">Something not right? Let us know and we'll fix it.</p>
+        <form id="complaint-form">
+            <div class="form-group">
+                <label for="complaint-email">Email (optional)</label>
+                <input type="email" id="complaint-email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+                <label for="complaint-message">Your Complaint</label>
+                <textarea id="complaint-message" rows="4" placeholder="Describe the issue..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Submit Complaint</button>
+        </form>
+        <div id="complaint-success" class="hidden" style="margin-top: 15px; color: var(--accent-green);"></div>
+    </div>
+</div>
 {% endblock %}

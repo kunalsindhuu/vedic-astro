@@ -8,7 +8,7 @@ const PLANET_SYMBOLS = { 'Sun': '☉', 'Moon': '☽', 'Mercury': '☿', 'Venus':
 // === LANGUAGE TRANSLATIONS ===
 const translations = {
     en: {
-        home: "Home", kundli: "Free Kundli", horoscope: "Horoscope", compatibility: "Compatibility",
+        home: "Home", kundli: "Free Kundli", horoscope: "Horoscope", numerology: "Numerology",
         services: "Services", pricing: "Pricing", blog: "Blog", about: "About", contact: "Contact",
         hero_title: "Discover Your Destiny",
         hero_subtitle: "Authentic Vedic astrology powered by real planetary calculations. Get your birth chart, Dasha predictions, and personalized insights.",
@@ -19,7 +19,7 @@ const translations = {
         complete_chart: "Complete Birth Chart", complete_desc: "North & South Indian Kundli, Navamsha (D9), and all planetary positions with degrees.",
         dasha_pred: "Dasha Predictions", dasha_desc: "Complete Vimshottari Dasha timeline showing your current and future planetary periods.",
         yoga_detection: "Yoga Detection", yoga_desc: "Automatic identification of powerful yogas in your chart like Raj Yogas and Dhana Yogas.",
-        compat_check: "Compatibility Check", compat_desc: "Check relationship compatibility based on Vedic astrology principles.",
+        numerology_check: "Numerology Calculator", numerology_desc: "Find your Life Path and Destiny numbers, lucky days, and ideal career paths.",
         daily_horoscope: "Daily Horoscope", daily_desc: "Daily predictions based on your moon sign with love, career, health, and finance scores.",
         today_horoscope: "Today's Horoscope", quick_preview: "Quick preview for each zodiac sign",
         how_works: "How It Works", step1: "Enter Birth Details", step1_desc: "Provide your date, time, and place of birth",
@@ -47,7 +47,7 @@ const translations = {
         email_note: "Please check your inbox (and spam folder) for your personalized report"
     },
     hi: {
-        home: "होम", kundli: "मुफ्त कुंडली", horoscope: "राशिफल", compatibility: "अनुकूलता",
+        home: "होम", kundli: "मुफ्त कुंडली", horoscope: "राशिफल", numerology: "अंक ज्योतिष",
         services: "सेवाएं", pricing: "मूल्य", blog: "ब्लॉग", about: "हमारे बारे में", contact: "संपर्क",
         hero_title: "अपना भाग्य जानें",
         hero_subtitle: "वास्तविक ग्रह गणनाओं से संचालित प्रमाणित वैदिक ज्योतिष। अपनी जन्म कुंडली, दशा भविष्यवाणियां और व्यक्तिगत जानकारी प्राप्त करें।",
@@ -58,7 +58,7 @@ const translations = {
         complete_chart: "पूर्ण जन्म कुंडली", complete_desc: "उत्तर और दक्षिण भारतीय कुंडली, नवांश (D9), और डिग्री के साथ सभी ग्रह स्थितियां।",
         dasha_pred: "दशा भविष्यवाणियां", dasha_desc: "आपकी वर्तमान और भावी ग्रह अवधियों को दर्शाने वाली पूर्ण विंशोत्तरी दशा समयरेखा।",
         yoga_detection: "योग पहचान", yoga_desc: "राज योग और धन योग जैसे आपकी कुंडली में शक्तिशाली योगों की स्वचालित पहचान।",
-        compat_check: "अनुकूलता जांच", compat_desc: "वैदिक ज्योतिष सिद्धांतों के आधार पर संबंध अनुकूलता जांचें।",
+        numerology_check: "अंक ज्योतिष कैलकुलेटर", numerology_desc: "अपना लाइफ पाथ और डेस्टिनी नंबर, भाग्यशाली दिन और आदर्श करियर खोजें।",
         daily_horoscope: "दैनिक राशिफल", daily_desc: "प्रेम, करियर, स्वास्थ्य और वित्त स्कोर के साथ आपकी चंद्र राशि के आधार पर दैनिक भविष्यवाणियां।",
         today_horoscope: "आज का राशिफल", quick_preview: "प्रत्येक राशि का त्वरित पूर्वावलोकन",
         how_works: "यह कैसे काम करता है", step1: "जन्म विवरण दर्ज करें", step1_desc: "अपनी तिथि, समय और जन्म स्थान प्रदान करें",
@@ -698,34 +698,44 @@ if (checkoutForm) {
         }
     });
 }
-// Compatibility check
-async function checkCompatibility() {
-    const sign1 = document.getElementById('sign1').value;
-    const sign2 = document.getElementById('sign2').value;
-
-    try {
-        const res = await fetch('/api/compatibility', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sign1, sign2 })
-        });
-        const data = await res.json();
-
-        if (data.success) {
-            document.getElementById('compatibility-result').classList.remove('hidden');
-            document.getElementById('comp-score').textContent = data.score + '%';
-            document.getElementById('comp-verdict').textContent = data.verdict;
-            document.getElementById('comp-details').innerHTML = `
-                <p><strong>${data.sign1}</strong> (${data.element1}) + <strong>${data.sign2}</strong> (${data.element2})</p>
-                <p style="margin-top:10px; color:#a0a0a0;">This is a basic elemental compatibility check. For a complete analysis including Nakshatra and Navamsha matching, get our Premium Compatibility Report.</p>
-            `;
-            document.getElementById('compatibility-result').scrollIntoView({ behavior: 'smooth' });
-        } else {
-            alert('Error: ' + (data.error || 'Something went wrong'));
+// Numerology calculator
+const numerologyForm = document.getElementById('numerology-form');
+if (numerologyForm) {
+    numerologyForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('num-name').value;
+        const day = document.getElementById('num-day').value;
+        const month = document.getElementById('num-month').value;
+        const year = document.getElementById('num-year').value;
+        if (!name || !day || !month || !year) {
+            alert('Please fill all fields');
+            return;
         }
-    } catch (err) {
-        alert('Error connecting to server. Please try again.');
-    }
+        try {
+            const res = await fetch('/api/numerology', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, day: parseInt(day), month: parseInt(month), year: parseInt(year) })
+            });
+            const data = await res.json();
+            if (data.success) {
+                document.getElementById('numerology-result').classList.remove('hidden');
+                document.getElementById('num-life-path').textContent = data.life_path;
+                document.getElementById('num-life-desc').textContent = data.life_path_desc;
+                document.getElementById('num-life-planets').textContent = data.life_planets.join(', ');
+                document.getElementById('num-lucky-numbers').textContent = data.life_lucky_numbers.join(', ');
+                document.getElementById('num-lucky-days').textContent = data.life_lucky_days.join(', ');
+                document.getElementById('num-careers').textContent = data.life_careers;
+                document.getElementById('num-destiny').textContent = data.destiny;
+                document.getElementById('num-destiny-desc').textContent = data.destiny_desc;
+                document.getElementById('numerology-result').scrollIntoView({ behavior: 'smooth' });
+            } else {
+                alert('Error: ' + (data.error || 'Something went wrong'));
+            }
+        } catch (err) {
+            alert('Error connecting to server. Please try again.');
+        }
+    });
 }
 
 // Admin status updates

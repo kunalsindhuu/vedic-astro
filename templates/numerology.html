@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Numerology Calculator - Vedic Astro{% endblock %}
+{% block meta_desc %}Calculate your Life Path and Destiny numbers using Vedic numerology. Discover your lucky numbers, lucky days, and ideal career paths.{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>🔢 Numerology Calculator</h1>
+    <p>Discover your Life Path and Destiny numbers</p>
+</div>
+
+<section class="card">
+    <h2>Enter Your Details</h2>
+    <form id="numerology-form">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="num-name">Full Name</label>
+                <input type="text" id="num-name" placeholder="As on birth certificate" required>
+            </div>
+            <div class="form-group">
+                <label for="num-day">Day</label>
+                <select id="num-day" required>
+                    <option value="" disabled selected>Day</option>
+                    {% for d in range(1, 32) %}
+                    <option value="{{ d }}">{{ d }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="num-month">Month</label>
+                <select id="num-month" required>
+                    <option value="" disabled selected>Month</option>
+                    {% for m in range(1, 13) %}
+                    <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="num-year">Year</label>
+                <select id="num-year" required>
+                    <option value="" disabled selected>Year</option>
+                    {% for y in range(2030, 1900, -1) %}
+                    <option value="{{ y }}">{{ y }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn-primary">Calculate Numbers</button>
+    </form>
+</section>
+
+<div id="numerology-result" class="hidden">
+    <div class="card">
+        <h2>Your Numerology Report</h2>
+        <div class="compatibility-score-display">
+            <div class="score-circle" id="num-life-path" style="font-size: 2em;"></div>
+            <h3 style="color: var(--primary);">Life Path Number</h3>
+            <p id="num-life-desc" style="color: var(--text-muted);"></p>
+        </div>
+
+        <div class="lucky-grid" style="margin: 20px 0;">
+            <div class="lucky-item">
+                <span class="lucky-label">Ruling Planets</span>
+                <span class="lucky-name" id="num-life-planets"></span>
+            </div>
+            <div class="lucky-item">
+                <span class="lucky-label">Lucky Numbers</span>
+                <span class="lucky-number-display" id="num-lucky-numbers"></span>
+            </div>
+            <div class="lucky-item">
+                <span class="lucky-label">Lucky Days</span>
+                <span class="lucky-name" id="num-lucky-days"></span>
+            </div>
+            <div class="lucky-item">
+                <span class="lucky-label">Ideal Careers</span>
+                <span class="lucky-name" id="num-careers"></span>
+            </div>
+        </div>
+
+        <hr style="border-color: var(--border); margin: 20px 0;">
+
+        <div class="compatibility-score-display">
+            <div class="score-circle" id="num-destiny" style="font-size: 2em;"></div>
+            <h3 style="color: var(--primary);">Destiny Number (from Name)</h3>
+            <p id="num-destiny-desc" style="color: var(--text-muted);"></p>
+        </div>
+        <p style="color: var(--text-muted); margin-top: 15px; font-size: 0.9em;">
+            Your Life Path number is calculated from your birth date and reveals your life's purpose.
+            Your Destiny number comes from your full birth name and shows the talents and opportunities that shape your path.
+        </p>
+    </div>
+</div>
+
+<section class="card" style="margin-top: 20px;">
+    <h2>About Numerology</h2>
+    <p>Numerology is the ancient study of the hidden meaning of numbers. In Vedic tradition, numbers are associated with the nine planets (Navagraha), and each number carries its own energy, strengths, and life lessons.</p>
+    <br>
+    <ul style="padding-left: 20px; line-height: 2;">
+        <li><strong>Life Path Number:</strong> Your birth date reduced to a single digit — your life's purpose</li>
+        <li><strong>Destiny Number:</strong> Your birth name reduced — your talents and opportunities</li>
+        <li><strong>Master Numbers (11, 22, 33):</strong> Powerful numbers that are not reduced, bringing exceptional gifts and challenges</li>
+        <li><strong>Lucky Numbers & Days:</strong> Based on the ruling planet of your Life Path number</li>
+    </ul>
+</section>
+{% endblock %}

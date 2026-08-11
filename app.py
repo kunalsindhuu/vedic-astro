@@ -626,9 +626,9 @@ def blog_post(post_id):
 def contact():
     return render_template('contact.html')
 
-@app.route('/compatibility')
-def compatibility():
-    return render_template('compatibility.html')
+@app.route('/numerology')
+def numerology():
+    return render_template('numerology.html')
 
 @app.route('/daily-horoscope')
 def daily_horoscope():
@@ -756,45 +756,72 @@ def cities():
     matches = [city.title() for city in CITY_DB.keys() if query in city]
     return jsonify(matches[:10])
 
-@app.route('/api/compatibility', methods=['POST'])
+@app.route('/api/numerology', methods=['POST'])
 @limiter.limit("30 per minute")
-def compatibility_check():
+def numerology_check():
     data = request.json
     if not data:
         return jsonify({'success': False, 'error': 'Invalid request'}), 400
     try:
-        sign1 = sanitize_string(data.get('sign1', 'Aries'), max_length=20)
-        sign2 = sanitize_string(data.get('sign2', 'Leo'), max_length=20)
-        
-        # Simple compatibility based on elements
-        elements = {'Aries': 'Fire', 'Leo': 'Fire', 'Sagittarius': 'Fire',
-                   'Taurus': 'Earth', 'Virgo': 'Earth', 'Capricorn': 'Earth',
-                   'Gemini': 'Air', 'Libra': 'Air', 'Aquarius': 'Air',
-                   'Cancer': 'Water', 'Scorpio': 'Water', 'Pisces': 'Water'}
-        
-        elem1 = elements.get(sign1, 'Fire')
-        elem2 = elements.get(sign2, 'Fire')
-        
-        # Compatibility logic
-        same_element = elem1 == elem2
-        compatible_pairs = [('Fire', 'Air'), ('Earth', 'Water')]
-        is_compatible = (elem1, elem2) in compatible_pairs or (elem2, elem1) in compatible_pairs
-        
-        if same_element:
-            score = 75
-            verdict = "Good - Same element creates understanding"
-        elif is_compatible:
-            score = 85
-            verdict = "Excellent - Complementary elements create balance"
-        else:
-            score = 50
-            verdict = "Challenging - Different elements require adjustment"
-        
+        name = sanitize_string(data.get('name', ''), max_length=50)
+        year = int(data.get('year', 2000))
+        month = int(data.get('month', 1))
+        day = int(data.get('day', 1))
+
+        if not (1 <= month <= 12) or not (1 <= day <= 31) or not (1900 <= year <= 2030):
+            return jsonify({'success': False, 'error': 'Invalid date'}), 400
+
+        # Life Path = reduce full date to a single digit (or master number 11/22)
+        total = sum(int(d) for d in str(year)) + month + day
+        life_path = total
+        while life_path > 9 and life_path not in (11, 22, 33):
+            life_path = sum(int(d) for d in str(life_path))
+
+        # Destiny = sum letters of name (A=1..Z=26 reduced)
+        alpha_map = {}
+        i = 1
+        for c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            alpha_map[c] = i if i <= 9 else (i % 9 if i % 9 else 9)
+            i += 1
+        name_total = 0
+        for ch in name.upper():
+            if ch.isalpha():
+                name_total += alpha_map[ch]
+        destiny = name_total
+        while destiny > 9 and destiny not in (11, 22, 33):
+            destiny = sum(int(d) for d in str(destiny))
+
+        # Lucky numbers & days based on life path
+        life_descriptions = {
+            1: ('Independent, ambitious, a natural leader.', ['Sun', 'Aries', 'Leo'], [1, 10, 19, 28], ['Sunday', 'Monday'], 'Leadership, entrepreneurship, pioneering fields.'),
+            2: ('Cooperative, diplomatic, sensitive.', ['Moon', 'Cancer'], [2, 11, 20, 29], ['Monday', 'Friday'], 'Partnerships, psychology, arts, diplomacy.'),
+            3: ('Creative, expressive, sociable.', ['Jupiter', 'Sagittarius'], [3, 12, 21, 30], ['Thursday', 'Friday'], 'Arts, writing, entertainment, communication.'),
+            4: ('Practical, disciplined, hardworking.', ['Rahu', 'Aquarius'], [4, 13, 22, 31], ['Sunday', 'Saturday'], 'Engineering, construction, management, security.'),
+            5: ('Adventurous, versatile, freedom-loving.', ['Mercury', 'Gemini'], [5, 14, 23], ['Wednesday', 'Friday'], 'Travel, sales, media, entrepreneurship.'),
+            6: ('Nurturing, responsible, family-oriented.', ['Venus', 'Libra'], [6, 15, 24], ['Friday', 'Monday'], 'Healing, teaching, hospitality, design.'),
+            7: ('Analytical, spiritual, introspective.', ['Ketu', 'Pisces'], [7, 16, 25], ['Monday', 'Saturday'], 'Research, science, spirituality, analysis.'),
+            8: ('Ambitious, powerful, business-minded.', ['Saturn', 'Capricorn'], [8, 17, 26], ['Saturday', 'Tuesday'], 'Business, finance, real estate, leadership.'),
+            9: ('Compassionate, humanitarian, artistic.', ['Mars', 'Scorpio'], [9, 18, 27], ['Tuesday', 'Friday'], 'Humanitarian work, arts, counselling, medicine.'),
+            11: ('Intuitive, inspired, visionary (Master Number).', ['Moon', 'Pisces'], [11, 22], ['Monday', 'Thursday'], 'Spiritual leadership, innovation, the arts.'),
+            22: ('Master builder, practical visionary.', ['Jupiter', 'Capricorn'], [22, 4], ['Saturday', 'Thursday'], 'Large-scale projects, architecture, institutions.'),
+            33: ('Master teacher, compassionate healer.', ['Venus', 'Leo'], [33, 6], ['Sunday', 'Friday'], 'Teaching, healing arts, spiritual guidance.'),
+        }
+        lp = life_descriptions.get(life_path, life_descriptions[1])
+        dp = life_descriptions.get(destiny, life_descriptions[1])
+
         return jsonify({
             'success': True,
-            'sign1': sign1, 'sign2': sign2,
-            'score': score, 'verdict': verdict,
-            'element1': elem1, 'element2': elem2
+            'name': name,
+            'life_path': life_path,
+            'life_path_desc': lp[0],
+            'life_planets': lp[1],
+            'life_lucky_numbers': lp[2],
+            'life_lucky_days': lp[3],
+            'life_careers': lp[4],
+            'destiny': destiny,
+            'destiny_desc': dp[0],
+            'destiny_careers': dp[4],
+            'destiny_lucky_numbers': dp[2],
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 400

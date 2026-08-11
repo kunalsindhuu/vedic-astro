@@ -49,6 +49,7 @@ def save_lead(lead):
 def send_lead_email(lead):
     """Email new lead details to the site owner (best-effort)."""
     if not SMTP_PASSWORD:
+        app.logger.warning('send_lead_email: SMTP_PASSWORD not set')
         return False
     try:
         b = lead.get('birth', {})
@@ -75,8 +76,10 @@ View all leads at your admin dashboard: /admin
         server.login(SMTP_USER, SMTP_PASSWORD)
         server.sendmail(SMTP_USER, CONTACT_EMAIL, msg.as_string())
         server.quit()
+        app.logger.info('send_lead_email: sent to %s', CONTACT_EMAIL)
         return True
-    except Exception:
+    except Exception as e:
+        app.logger.error('send_lead_email: FAILED %s: %s', type(e).__name__, e)
         return False
 
 # === SECURITY SETTINGS ===

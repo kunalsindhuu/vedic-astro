@@ -1,70 +1,120 @@
 {% extends "base.html" %}
 
 {% block title %}Free Kundli - Birth Chart Analysis{% endblock %}
-{% block meta_desc %}Get your free Vedic birth chart (Kundli) with accurate planetary positions, Dasha timeline, and personalized predictions.{% endblock %}
 
 {% block content %}
 <div class="page-header">
-    <h1 data-i18n="kundli">Free Kundli Analysis</h1>
-    <p data-i18n="hero_subtitle">Enter your birth details for an authentic Vedic astrology reading</p>
+    <h1>🔮 Get Your Free Kundli</h1>
+    <p>Enter your birth details for an instant Vedic astrology reading</p>
 </div>
 
 <!-- Input Section -->
-<section id="input-section" class="card input-card">
+<section id="input-section" class="card">
     <form id="birth-form">
-        <div class="form-grid">
-            <div class="form-group full-width">
-                <label for="name" data-i18n="name_label">Full Name</label>
+        <!-- Name & Email -->
+        <div class="form-row">
+            <div class="form-group">
+                <label for="name">👤 Your Name</label>
                 <input type="text" id="name" placeholder="Enter your full name" required>
             </div>
             <div class="form-group">
+                <label for="email">📧 Email (Optional)</label>
+                <input type="email" id="email" placeholder="For detailed report">
+            </div>
+        </div>
+
+        <!-- Date of Birth -->
+        <h4 style="color: var(--primary); margin: 20px 0 10px;">📅 Date of Birth</h4>
+        <div class="form-row">
+            <div class="form-group">
                 <label for="day">Day</label>
                 <select id="day" required>
-                    <option value="">Day</option>
-                    {% for i in range(1,32) %}<option value="{{ i }}">{{ i }}</option>{% endfor %}
+                    <option value="" disabled selected>Day</option>
+                    <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+                    <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+                    <option value="7">7</option><option value="8">8</option><option value="9">9</option>
+                    <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                    <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                    <option value="16">16</option><option value="17">17</option><option value="18">18</option>
+                    <option value="19">19</option><option value="20">20</option><option value="21">21</option>
+                    <option value="22">22</option><option value="23">23</option><option value="24">24</option>
+                    <option value="25">25</option><option value="26">26</option><option value="27">27</option>
+                    <option value="28">28</option><option value="29">29</option><option value="30">30</option>
+                    <option value="31">31</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="month">Month</label>
                 <select id="month" required>
-                    <option value="">Month</option>
-                    <option value="1">Jan</option><option value="2">Feb</option>
-                    <option value="3">Mar</option><option value="4">Apr</option>
-                    <option value="5">May</option><option value="6">Jun</option>
-                    <option value="7">Jul</option><option value="8">Aug</option>
-                    <option value="9">Sep</option><option value="10">Oct</option>
-                    <option value="11">Nov</option><option value="12">Dec</option>
+                    <option value="" disabled selected>Month</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="year">Year</label>
                 <select id="year" required>
-                    <option value="">Year</option>
-                    {% for y in range(2025, 1919, -1) %}<option value="{{ y }}" {% if y == 2005 %}selected{% endif %}>{{ y }}</option>{% endfor %}
+                    <option value="" disabled selected>Year</option>
+                    <option value="2010">2010</option><option value="2009">2009</option>
+                    <option value="2008">2008</option><option value="2007">2007</option>
+                    <option value="2006">2006</option><option value="2005" selected>2005</option>
+                    <option value="2004">2004</option><option value="2003">2003</option>
+                    <option value="2002">2002</option><option value="2001">2001</option>
+                    <option value="2000">2000</option><option value="1999">1999</option>
+                    <option value="1998">1998</option><option value="1997">1997</option>
+                    <option value="1996">1996</option><option value="1995">1995</option>
+                    <option value="1990">1990</option><option value="1985">1985</option>
+                    <option value="1980">1980</option><option value="1975">1975</option>
+                    <option value="1970">1970</option><option value="1965">1965</option>
+                    <option value="1960">1960</option>
                 </select>
             </div>
+        </div>
+
+        <!-- Time of Birth -->
+        <h4 style="color: var(--primary); margin: 20px 0 10px;">⏰ Time of Birth</h4>
+        <div class="form-row">
             <div class="form-group">
                 <label for="hour">Hour (24h)</label>
                 <select id="hour" required>
-                    <option value="">Hour</option>
-                    {% for h in range(0,24) %}<option value="{{ h }}">{{ "%02d"|format(h) }}</option>{% endfor %}
+                    <option value="" disabled selected>Hour</option>
+                    <option value="0">00</option><option value="1">01</option><option value="2">02</option>
+                    <option value="3">03</option><option value="4">04</option><option value="5">05</option>
+                    <option value="6">06</option><option value="7">07</option><option value="8">08</option>
+                    <option value="9">09</option><option value="10">10</option><option value="11">11</option>
+                    <option value="12">12</option><option value="13">13</option><option value="14">14</option>
+                    <option value="15">15</option><option value="16">16</option><option value="17">17</option>
+                    <option value="18">18</option><option value="19">19</option><option value="20">20</option>
+                    <option value="21">21</option><option value="22">22</option><option value="23">23</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="minute">Minute</label>
                 <select id="minute" required>
-                    <option value="">Min</option>
-                    {% for m in range(0,60) %}<option value="{{ m }}">{{ "%02d"|format(m) }}</option>{% endfor %}
+                    <option value="" disabled selected>Min</option>
+                    <option value="0">00</option><option value="5">05</option><option value="10">10</option>
+                    <option value="15">15</option><option value="20">20</option><option value="25">25</option>
+                    <option value="30">30</option><option value="35">35</option><option value="40">40</option>
+                    <option value="45">45</option><option value="50">50</option><option value="55">55</option>
                 </select>
             </div>
-            <div class="form-group full-width">
-                <label for="city" data-i18n="city_label">City of Birth</label>
-                <input type="text" id="city" placeholder="Start typing your birth city..." list="city-list" required>
-                <datalist id="city-list"></datalist>
-                <span class="hint" data-i18n="cities">Supports 100+ cities worldwide</span>
+            <div class="form-group">
+                <label for="city">📍 City</label>
+                <input type="text" id="city" placeholder="e.g., Delhi, Mumbai" required>
             </div>
         </div>
-        <button type="submit" class="btn-primary" data-i18n="hero_btn1">Generate My Birth Chart</button>
+
+        <button type="submit" class="btn-primary">✨ Generate My Free Kundli</button>
     </form>
 </section>
 
@@ -72,13 +122,14 @@
 <div id="loading" class="card hidden">
     <div class="loading-content">
         <div class="cosmic-spinner"></div>
-        <p>Calculating planetary positions...</p>
-        <p class="loading-sub">Using Swiss Ephemeris for precision</p>
+        <p>🔮 Calculating planetary positions...</p>
     </div>
 </div>
 
 <!-- Results -->
 <div id="results" class="hidden">
+    <div id="email-confirmation-container"></div>
+
     <div class="card summary-card">
         <div class="summary-header">
             <h2 id="result-name"></h2>
@@ -90,87 +141,68 @@
             <div class="summary-item nakshatra"><span class="summary-label">Nakshatra</span><span class="summary-value" id="nakshatra"></span></div>
             <div class="summary-item dasha"><span class="summary-label">Current Dasha</span><span class="summary-value" id="current-dasha"></span></div>
         </div>
-        <div id="vargottama-badge" class="badge hidden">⚡ Vargottama Ascendant</div>
+        <div id="vargottama-badge" class="badge hidden">⚡ Vargottama</div>
     </div>
 
+    <!-- Planet Cards -->
+    <div class="card">
+        <h2>🪐 Planetary Positions</h2>
+        <div class="planet-cards-grid" id="planet-cards-grid"></div>
+    </div>
+
+    <!-- Birth Chart -->
     <div class="card">
         <div class="card-title">
             <h2>Birth Chart</h2>
             <div class="chart-tabs">
-                <button class="tab-btn active" onclick="showChart('north')">North Indian</button>
-                <button class="tab-btn" onclick="showChart('south')">South Indian</button>
+                <button class="tab-btn active" onclick="showChart('north')">North</button>
+                <button class="tab-btn" onclick="showChart('south')">South</button>
             </div>
         </div>
         <div id="north-chart" class="chart-container"></div>
         <div id="south-chart" class="chart-container hidden"></div>
     </div>
 
+    <!-- Lucky Details -->
     <div class="card">
-        <h2>Planetary Positions</h2>
-        <div class="table-responsive">
-            <table id="planet-table">
-                <thead><tr><th>Planet</th><th>Sign</th><th>Degree</th><th>House</th><th>Retro</th><th>Navamsha</th><th></th></tr></thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Navamsha Chart (D9)</h2>
-        <p class="card-desc">Your inner self, marriage potential, and spiritual path</p>
-        <div id="navamsha-chart" class="chart-container"></div>
-    </div>
-
-    <!-- Lucky Color & Number Section -->
-    <div class="card lucky-section">
-        <h2 data-i18n="lucky_section">🎨 Your Lucky Color & Number</h2>
-        <p class="card-desc" data-i18n="lucky_based">Based on your Ascendant lord and birth details</p>
+        <h2>🎨 Your Lucky Details</h2>
         <div class="lucky-grid">
-            <div class="lucky-item color-item">
-                <span class="lucky-label" data-i18n="lucky_color">Lucky Color</span>
-                <div class="lucky-color-display" id="lucky-color"></div>
-                <span class="lucky-name" id="lucky-color-name"></span>
-            </div>
-            <div class="lucky-item number-item">
-                <span class="lucky-label" data-i18n="lucky_number">Lucky Number</span>
-                <span class="lucky-number-display" id="lucky-number"></span>
-                <span class="lucky-desc" id="lucky-number-desc"></span>
-            </div>
-            <div class="lucky-item gem-item">
-                <span class="lucky-label" data-i18n="lucky_gem">Lucky Gemstone</span>
-                <span class="lucky-gem-icon" id="lucky-gem-icon">💎</span>
-                <span class="lucky-name" id="lucky-gem-name"></span>
-            </div>
-            <div class="lucky-item direction-item">
-                <span class="lucky-label" data-i18n="lucky_dir">Lucky Direction</span>
-                <span class="lucky-direction-icon" id="lucky-direction-icon">🧭</span>
-                <span class="lucky-name" id="lucky-direction-name"></span>
-            </div>
+            <div class="lucky-item"><span class="lucky-label">Lucky Color</span><div class="lucky-color-display" id="lucky-color"></div><span class="lucky-name" id="lucky-color-name"></span></div>
+            <div class="lucky-item"><span class="lucky-label">Lucky Number</span><span class="lucky-number-display" id="lucky-number"></span><span class="lucky-desc" id="lucky-number-desc"></span></div>
+            <div class="lucky-item"><span class="lucky-label">Lucky Gem</span><span class="lucky-gem-icon" id="lucky-gem-icon">💎</span><span class="lucky-name" id="lucky-gem-name"></span></div>
+            <div class="lucky-item"><span class="lucky-label">Lucky Direction</span><span class="lucky-direction-icon" id="lucky-direction-icon">🧭</span><span class="lucky-name" id="lucky-direction-name"></span></div>
         </div>
     </div>
 
+    <!-- Yogas -->
     <div class="card">
-        <h2 data-i18n="astro_yogas">Astrological Yogas</h2>
+        <h2>Astrological Yogas</h2>
         <div id="yogas-list"></div>
     </div>
 
+    <!-- Dasha -->
     <div class="card">
-        <h2 data-i18n="dasha_timeline">Vimshottari Dasha Timeline</h2>
+        <h2>Dasha Timeline</h2>
         <div class="table-responsive">
-            <table id="dasha-table">
-                <thead><tr><th>Dasha</th><th>Start</th><th>End</th><th>Duration</th><th></th></tr></thead>
-                <tbody></tbody>
-            </table>
+            <table id="dasha-table"><thead><tr><th>Dasha</th><th>Start</th><th>End</th><th>Years</th><th></th></tr></thead><tbody></tbody></table>
         </div>
     </div>
 
+    <!-- Navamsha -->
     <div class="card">
-        <h2 data-i18n="life_analysis">Life Analysis</h2>
+        <h2>Navamsha (D9)</h2>
+        <div id="navamsha-chart" class="chart-container"></div>
+    </div>
+
+    <!-- Analysis -->
+    <div class="card">
+        <h2>Life Analysis</h2>
         <div id="predictions"></div>
     </div>
 
+    <!-- Scores -->
     <div class="score-section">
-        <h2 data-i18n="life_scores">Life Scores</h2>
+        <h2>Life Scores</h2>
         <div class="score-grid" id="score-grid"></div>
     </div>
 </div>

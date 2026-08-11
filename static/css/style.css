@@ -4,15 +4,22 @@
 :root {
     --primary: #f0c040;
     --primary-dark: #d4a020;
-    --bg-dark: #0a0a1a;
-    --bg-card: rgba(20, 20, 40, 0.8);
-    --text: #e8e8f0;
-    --text-muted: #a0a0b8;
-    --accent-green: #4ecdc4;
-    --accent-red: #ff6b6b;
+    --bg-dark: #050510;
+    --bg-card: rgba(15, 15, 35, 0.9);
+    --text: #f0f0f8;
+    --text-muted: #8888a8;
+    --accent-green: #00ffa3;
+    --accent-red: #ff4757;
     --accent-purple: #a855f7;
-    --border: rgba(240, 192, 64, 0.2);
-    --glow: 0 0 30px rgba(240, 192, 64, 0.15);
+    --accent-blue: #3b82f6;
+    --accent-orange: #ff6b35;
+    --border: rgba(240, 192, 64, 0.25);
+    --glow: 0 0 40px rgba(240, 192, 64, 0.2);
+    --glow-strong: 0 0 60px rgba(240, 192, 64, 0.35);
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -107,39 +114,61 @@ body {
 .hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: 60px;
     align-items: center;
-    padding: 60px 0;
+    padding: 80px 0;
+    position: relative;
 }
 
 .hero h1 {
     font-family: 'Cinzel', serif;
-    font-size: 2.8em;
+    font-size: 3.2em;
     color: var(--primary);
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     line-height: 1.2;
+    color: var(--primary);
 }
 
 .hero p {
     color: var(--text-muted);
-    font-size: 1.1em;
-    margin-bottom: 24px;
+    font-size: 1.2em;
+    margin-bottom: 32px;
+    line-height: 1.8;
 }
 
-.hero-buttons { display: flex; gap: 12px; margin-bottom: 32px; }
+.hero-buttons { display: flex; gap: 16px; margin-bottom: 40px; }
 
-.hero-stats { display: flex; gap: 32px; }
+.hero-stats { display: flex; gap: 40px; }
 
-.stat { text-align: center; }
+.stat { 
+    text-align: center; 
+    padding: 16px 24px;
+    background: rgba(240, 192, 64, 0.08);
+    border-radius: 12px;
+    border: 1px solid rgba(240, 192, 64, 0.15);
+    transition: all 0.3s ease;
+}
+
+.stat:hover {
+    transform: translateY(-3px);
+    background: rgba(240, 192, 64, 0.15);
+    border-color: rgba(240, 192, 64, 0.3);
+}
+
 .stat-number {
     display: block;
-    font-size: 1.5em;
+    font-size: 1.8em;
     font-weight: 700;
     color: var(--primary);
 }
-.stat-label { color: var(--text-muted); font-size: 0.85em; }
+.stat-label { color: var(--text-muted); font-size: 0.9em; }
 
-.hero-visual { display: flex; justify-content: center; }
+.hero-visual { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    min-height: 400px;
+}
 
 .cosmic-circle {
     width: 250px;
@@ -893,18 +922,100 @@ tr:hover td { background: rgba(240, 192, 64, 0.03); }
 .disclaimer { font-size: 0.75em; margin-top: 4px; opacity: 0.7; }
 
 /* === UTILITIES === */
-/* === 3D EFFECTS === */
+/* Background with subtle pattern */
+body {
+    background: var(--bg-dark);
+    background-image: 
+        radial-gradient(ellipse at 20% 50%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(240, 192, 64, 0.04) 0%, transparent 50%);
+    min-height: 100vh;
+}
+
+/* Decorative stars */
+.stars-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 50% 10%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 70% 80%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 15% 70%, rgba(240,192,64,0.2), transparent),
+        radial-gradient(2px 2px at 85% 30%, rgba(240,192,64,0.2), transparent);
+    background-size: 200px 200px;
+}
+
+/* Form styling */
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text);
+    font-size: 1em;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f0c040' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(240, 192, 64, 0.2);
+}
+
+.form-group select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+/* Zodiac decorations */
+.zodiac-decoration {
+    position: absolute;
+    font-size: 1.5em;
+    color: rgba(240, 192, 64, 0.1);
+    pointer-events: none;
+}
+
+.zodiac-decoration.top-right {
+    top: 100px;
+    right: 50px;
+    font-size: 4em;
+}
+
+.zodiac-decoration.bottom-left {
+    bottom: 100px;
+    left: 50px;
+    font-size: 3em;
+}
+
 .card {
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(240, 192, 64, 0.15);
+    background: var(--bg-card);
 }
 
 .card:hover {
-    transform: translateY(-5px) rotateX(2deg);
-    box-shadow: 
-        0 20px 60px rgba(240, 192, 64, 0.15),
-        0 0 40px rgba(240, 192, 64, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(240, 192, 64, 0.15);
+    border-color: rgba(240, 192, 64, 0.3);
 }
 
 /* Floating 3D elements */
@@ -920,53 +1031,35 @@ tr:hover td { background: rgba(240, 192, 64, 0.03); }
     transform: perspective(500px) rotateY(0deg) scale(1.05);
 }
 
-/* 3D Text effect */
-h1, h2, .logo-text {
-    text-shadow: 
-        0 1px 0 #ccc,
-        0 2px 0 #c9c9c9,
-        0 3px 0 #bbb,
-        0 4px 0 #b9b9b9,
-        0 5px 0 #aaa,
-        0 6px 1px rgba(0,0,0,.1),
-        0 0 5px rgba(0,0,0,.1),
-        0 1px 3px rgba(0,0,0,.3),
-        0 3px 5px rgba(0,0,0,.2),
-        0 5px 10px rgba(0,0,0,.25);
+/* Clean text - easy to read */
+h1, h2, h3, .logo-text {
+    text-shadow: none;
 }
 
-/* 3D Button effect */
+/* Clean button style */
 .btn-primary {
-    transform-style: preserve-3d;
-    box-shadow: 
-        0 4px 0 #b8860b,
-        0 5px 10px rgba(0,0,0,.3);
+    box-shadow: 0 2px 10px rgba(240, 192, 64, 0.3);
     transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px) rotateX(5deg);
-    box-shadow: 
-        0 6px 0 #b8860b,
-        0 8px 20px rgba(0,0,0,.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(240, 192, 64, 0.4);
 }
 
 .btn-primary:active {
-    transform: translateY(2px);
-    box-shadow: 
-        0 2px 0 #b8860b,
-        0 3px 10px rgba(0,0,0,.3);
+    transform: translateY(0);
+    box-shadow: 0 1px 5px rgba(240, 192, 64, 0.3);
 }
 
-/* 3D Chart cells */
+/* Clean chart cells */
 .cell {
-    transform-style: preserve-3d;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .cell:hover {
-    transform: translateZ(10px) scale(1.05);
-    box-shadow: 0 10px 30px rgba(240, 192, 64, 0.3);
+    background: rgba(240, 192, 64, 0.1);
+    border-color: rgba(240, 192, 64, 0.4);
 }
 
 /* Parallax stars background */
@@ -1008,15 +1101,14 @@ h1, h2, .logo-text {
         0 0 40px rgba(240, 192, 64, 0.1);
 }
 
-/* 3D score cards */
+/* Clean score cards */
 .score-card {
-    transform-style: preserve-3d;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .score-card:hover {
-    transform: translateY(-5px) rotateY(5deg);
-    box-shadow: 0 15px 40px rgba(240, 192, 64, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(240, 192, 64, 0.2);
 }
 
 /* === LUCKY SECTION === */
@@ -1124,66 +1216,150 @@ h1, h2, .logo-text {
     100% { transform: rotateY(360deg) rotateX(10deg); }
 }
 
-/* === FLOATING ASTROLOGY ELEMENTS === */
+/* Floating elements - simplified, no animation */
 .floating-elements {
-    position: fixed;
-    top: 0;
-    left: 0;
+    display: none;
+}
+
+/* === PLANET SVG STYLES === */
+.planet-container {
+    position: absolute;
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
     pointer-events: none;
-    z-index: 0;
     overflow: hidden;
 }
 
-.float-item {
+.planet-svg {
     position: absolute;
-    font-size: 2em;
-    color: rgba(240, 192, 64, 0.15);
-    animation: floatAround 20s ease-in-out infinite;
-    text-shadow: 0 0 20px rgba(240, 192, 64, 0.3);
+    filter: drop-shadow(0 0 20px currentColor);
+    animation: planetFloat 20s ease-in-out infinite;
 }
 
-.float-1 { top: 10%; left: 5%; animation-delay: 0s; animation-duration: 25s; }
-.float-2 { top: 20%; right: 8%; animation-delay: 2s; animation-duration: 22s; }
-.float-3 { top: 40%; left: 3%; animation-delay: 4s; animation-duration: 28s; }
-.float-4 { top: 60%; right: 5%; animation-delay: 6s; animation-duration: 24s; }
-.float-5 { top: 80%; left: 8%; animation-delay: 8s; animation-duration: 26s; }
-.float-6 { top: 30%; right: 3%; animation-delay: 10s; animation-duration: 23s; }
-.float-7 { top: 70%; left: 6%; animation-delay: 12s; animation-duration: 27s; }
-.float-8 { top: 50%; right: 10%; animation-delay: 14s; animation-duration: 21s; }
-
-@keyframes floatAround {
-    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.15; }
-    25% { transform: translate(30px, -40px) rotate(90deg) scale(1.2); opacity: 0.25; }
-    50% { transform: translate(-20px, -80px) rotate(180deg) scale(1); opacity: 0.15; }
-    75% { transform: translate(40px, -40px) rotate(270deg) scale(1.1); opacity: 0.2; }
+.planet-svg.sun {
+    color: #FFD700;
+    top: 10%;
+    right: 10%;
+    animation-delay: 0s;
+    animation-duration: 25s;
 }
 
-/* === ASTROLOGY IMAGE PLACEHOLDERS === */
-.astro-decoration {
-    position: absolute;
-    opacity: 0.1;
-    pointer-events: none;
+.planet-svg.moon {
+    color: #C0C0C0;
+    bottom: 20%;
+    left: 5%;
+    animation-delay: 2s;
+    animation-duration: 22s;
 }
 
-.astro-decoration.zodiac-wheel {
+.planet-svg.jupiter {
+    color: #FFA500;
+    top: 50%;
+    right: 5%;
+    animation-delay: 4s;
+    animation-duration: 28s;
+}
+
+.planet-svg.venus {
+    color: #FFB6C1;
+    top: 30%;
+    left: 8%;
+    animation-delay: 6s;
+    animation-duration: 24s;
+}
+
+.planet-svg.mars {
+    color: #FF4500;
+    bottom: 30%;
+    right: 15%;
+    animation-delay: 8s;
+    animation-duration: 26s;
+}
+
+.planet-svg.saturn {
+    color: #DAA520;
+    top: 70%;
+    left: 3%;
+    animation-delay: 10s;
+    animation-duration: 30s;
+}
+
+.planet-svg.rahu {
+    color: #4B0082;
+    top: 15%;
+    left: 15%;
+    animation-delay: 12s;
+    animation-duration: 23s;
+}
+
+.planet-svg.ketu {
+    color: #708090;
+    bottom: 15%;
+    right: 25%;
+    animation-delay: 14s;
+    animation-duration: 27s;
+}
+
+@keyframes planetFloat {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.6; }
+    25% { transform: translate(20px, -30px) rotate(90deg) scale(1.1); opacity: 0.8; }
+    50% { transform: translate(-15px, -50px) rotate(180deg) scale(1); opacity: 0.6; }
+    75% { transform: translate(25px, -25px) rotate(270deg) scale(1.05); opacity: 0.7; }
+}
+
+/* Simplified astro wheel */
+.astro-wheel {
+    position: relative;
     width: 200px;
     height: 200px;
-    border: 2px solid var(--primary);
-    border-radius: 50%;
-    animation: rotate 30s linear infinite;
+    margin: 0 auto;
 }
 
-.astro-decoration.zodiac-wheel::before {
-    content: '♈♉♊♋♌♍♎♏♐♑♒♓';
+.astro-wheel-outer {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 0.8em;
-    letter-spacing: 8px;
-    color: var(--primary);
+    width: 100%;
+    height: 100%;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    opacity: 0.7;
+}
+
+.astro-wheel-inner {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+    border: 1px solid var(--accent-purple);
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+.astro-wheel-symbols {
+    display: none;
+}
+
+/* Planet cards - clean style */
+.planet-card {
+    background: rgba(15, 15, 35, 0.6);
+    border: 1px solid rgba(240, 192, 64, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.planet-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary);
+    background: rgba(20, 20, 45, 0.8);
+}
+
+.planet-card-icon svg {
+    width: 36px;
+    height: 36px;
 }
 
 /* Section decorations */
@@ -1464,6 +1640,198 @@ section::before {
     color: var(--primary);
     animation: float 4s ease-in-out infinite;
 }
+
+/* === PLANET CARDS GRID === */
+.planet-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.planet-card {
+    background: linear-gradient(145deg, rgba(25, 25, 55, 0.9), rgba(10, 10, 30, 0.95));
+    border: 1px solid rgba(240, 192, 64, 0.2);
+    border-radius: 16px;
+    padding: 16px 12px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.planet-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent-purple));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.planet-card:hover::before {
+    opacity: 1;
+}
+
+.planet-card:hover {
+    transform: translateY(-5px) scale(1.03);
+    border-color: var(--primary);
+    box-shadow: 0 15px 40px rgba(240, 192, 64, 0.25);
+}
+
+.planet-card-icon {
+    font-size: 2.5em;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 10px currentColor);
+    transition: transform 0.3s;
+}
+
+.planet-card:hover .planet-card-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.planet-card-name {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.95em;
+    margin-bottom: 4px;
+}
+
+.planet-card-sign {
+    color: var(--primary);
+    font-size: 0.85em;
+    margin-bottom: 4px;
+}
+
+.planet-card-deg {
+    color: var(--text-muted);
+    font-size: 0.8em;
+}
+
+.planet-card-retro {
+    display: inline-block;
+    background: rgba(255, 71, 87, 0.2);
+    color: var(--accent-red);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7em;
+    margin-top: 6px;
+}
+
+.planet-card-house {
+    color: var(--accent-green);
+    font-size: 0.75em;
+    margin-top: 4px;
+}
+
+/* Planet-specific colors */
+.planet-card.sun .planet-card-icon { color: #FFD700; }
+.planet-card.moon .planet-card-icon { color: #C0C0C0; }
+.planet-card.mars .planet-card-icon { color: #FF4500; }
+.planet-card.mercury .planet-card-icon { color: #00FF00; }
+.planet-card.jupiter .planet-card-icon { color: #FFA500; }
+.planet-card.venus .planet-card-icon { color: #FFB6C1; }
+.planet-card.saturn .planet-card-icon { color: #DAA520; }
+.planet-card.rahu .planet-card-icon { color: #800080; }
+.planet-card.ketu .planet-card-icon { color: #708090; }
+
+/* === EMAIL CONFIRMATION === */
+.email-confirmation {
+    background: linear-gradient(135deg, rgba(78, 205, 196, 0.15), rgba(240, 192, 64, 0.1));
+    border: 2px solid var(--accent-green);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(78, 205, 196, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(78, 205, 196, 0.5); }
+}
+
+.email-confirmation-content {
+    text-align: center;
+    padding: 20px;
+}
+
+.email-icon {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 12px;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.email-confirmation h3 {
+    color: var(--accent-green);
+    font-size: 1.4em;
+    margin-bottom: 12px;
+}
+
+.email-confirmation p {
+    color: var(--text);
+    font-size: 1.05em;
+    margin-bottom: 8px;
+}
+
+.email-note {
+    color: var(--text-muted);
+    font-size: 0.9em !important;
+    font-style: italic;
+}
+
+/* === EMAIL FORM FIELD === */
+.form-group input[type="email"] {
+    border-color: rgba(78, 205, 196, 0.3);
+}
+
+.form-group input[type="email"]:focus {
+    border-color: var(--accent-green);
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.2);
+}
+
+/* Hero Visual */
+.zodiac-circle {
+    width: 220px;
+    height: 220px;
+    border: 2px solid rgba(240, 192, 64, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.zodiac-inner {
+    color: var(--primary);
+    font-size: 1.2em;
+    letter-spacing: 6px;
+    opacity: 0.7;
+}
+
+.hero-planets {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+}
+
+.planet-icon {
+    position: absolute;
+    font-size: 1.8em;
+    text-shadow: 0 0 15px currentColor;
+}
+
+.planet-icon.sun { color: #FFD700; top: 0; left: 50%; transform: translateX(-50%); }
+.planet-icon.moon { color: #C0C0C0; top: 30%; right: 0; }
+.planet-icon.jupiter { color: #FFA500; bottom: 30%; right: 5%; }
+.planet-icon.venus { color: #FFB6C1; bottom: 0; left: 50%; transform: translateX(-50%); }
+.planet-icon.mars { color: #FF4500; bottom: 30%; left: 5%; }
+.planet-icon.saturn { color: #DAA520; top: 30%; left: 0; }
 
 .hidden { display: none !important; }
 

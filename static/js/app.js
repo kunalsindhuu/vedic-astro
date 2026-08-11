@@ -35,10 +35,16 @@ const translations = {
         life_analysis: "Life Analysis", life_scores: "Life Scores",
         your_chart: "'s Birth Chart", birth_info: "Birth Information",
         planet: "Planet", sign: "Sign", degree: "Degree", house: "House", retro: "Retrograde",
-        name_label: "Full Name", city_label: "City of Birth",
+        name_label: "Full Name", city_label: "City of Birth", email_label: "Email Address",
         enter_name: "Enter your full name", enter_city: "Start typing your birth city...",
+        enter_email: "your@email.com",
         fill_all: "Please fill in all fields", calc_running: "Calculating planetary positions...",
-        calc_precision: "Using Swiss Ephemeris for precision"
+        calc_precision: "Using Swiss Ephemeris for precision",
+        email_hint: "Your detailed reading will be sent to this email within 24 hours",
+        email_success_title: "Your Reading is Being Prepared!",
+        email_success_msg: "Your detailed Kundli reading will be sent to",
+        email_success_time: "within 24 hours",
+        email_note: "Please check your inbox (and spam folder) for your personalized report"
     },
     hi: {
         home: "होम", kundli: "मुफ्त कुंडली", horoscope: "राशिफल", compatibility: "अनुकूलता",
@@ -62,41 +68,65 @@ const translations = {
         ready: "अपना भाग्य जानने के लिए तैयार हैं?",
         lucky_section: "🎨 आपका भाग्यशाली रंग और संख्या",
         lucky_based: "आपकी लग्न देवता और जन्म विवरण के आधार पर",
-        lucky_color: "भाग्यशाली रंग", lucky_number: "भाग्यशाली संख्या", lucky_gem: "भाग्यशाली रत्न", lucky_dir: "भाग्यशाली दिशा",
+        lucky_color: "भाग्यशाली रंग", lucky_number: "भाग्�yशाली संख्या", lucky_gem: "भाग्यशाली रत्न", lucky_dir: "भाग्यशाली दिशा",
         based_on: "आधारित", birth_details: "जन्म विवरण",
         astro_yogas: "ज्योतिषीय योग", dasha_timeline: "विंशोत्तरी दशा समयरेखा",
         life_analysis: "जीवन विश्लेषण", life_scores: "जीवन स्कोर",
         your_chart: " की जन्म कुंडली", birth_info: "जन्म जानकारी",
         planet: "ग्रह", sign: "राशि", degree: "डिग्री", house: "भाव", retro: "वक्री",
-        name_label: "पूरा नाम", city_label: "जन्म शहर",
+        name_label: "पूरा नाम", city_label: "जन्म शहर", email_label: "ईमेल पता",
         enter_name: "अपना पूरा नाम दर्ज करें", enter_city: "अपना जन्म शहर टाइप करना शुरू करें...",
+        enter_email: "your@email.com",
         fill_all: "कृपया सभी फ़ील्ड भरें", calc_running: "ग्रहों की स्थिति की गणना हो रही है...",
-        calc_precision: "सटीकता के लिए स्विस एफीमेरिस का उपयोग"
+        calc_precision: "सटीकता के लिए स्विस एफीमेरिस का उपयोग",
+        email_hint: "आपकी विस्तृत रीडिंग 24 घंटे के भीतर इस ईमेल पर भेजी जाएगी",
+        email_success_title: "आपकी रीडिंग तैयार की जा रही है!",
+        email_success_msg: "आपकी विस्तृत कुंडली रीडिंग भेजी जाएगी",
+        email_success_time: "24 घंटे के भीतर",
+        email_note: "कृपया अपने इनबॉक्स (और स्पैम फ़ोल्डर) में अपनी व्यक्तिगत रिपोर्ट देखें"
     }
 };
 
-let currentLang = 'en';
+let currentLang = localStorage.getItem('lang') || 'en';
 
 function toggleLanguage() {
     currentLang = currentLang === 'en' ? 'hi' : 'en';
+    localStorage.setItem('lang', currentLang);
     document.getElementById('lang-text').textContent = currentLang === 'en' ? 'हिन्दी' : 'English';
     updatePageLanguage();
 }
 
 function updatePageLanguage() {
     const t = translations[currentLang];
+    if (!t) return;
+    
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (t[key]) el.textContent = t[key];
+        if (t[key]) {
+            el.textContent = t[key];
+        }
     });
+    
+    // Update placeholder texts
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (t[key]) {
+            el.placeholder = t[key];
+        }
+    });
+    
     document.documentElement.lang = currentLang === 'hi' ? 'hi' : 'en';
+    document.documentElement.dir = 'ltr';
 }
 
-// Initialize
+// Initialize language on page load
 document.addEventListener('DOMContentLoaded', () => {
     setupCityAutocomplete();
     setupNavToggle();
+    updatePageLanguage();
 });
+
+
 
 function setupNavToggle() {
     const toggle = document.querySelector('.nav-toggle');
@@ -129,51 +159,77 @@ function setupCityAutocomplete() {
     });
 }
 
-// Form submission
-const birthForm = document.getElementById('birth-form');
-if (birthForm) {
-    birthForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+// Form submission - SIMPLIFIED
+document.getElementById('birth-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Get values
+    var name = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var day = document.getElementById('day').value;
+    var month = document.getElementById('month').value;
+    var year = document.getElementById('year').value;
+    var hour = document.getElementById('hour').value;
+    var minute = document.getElementById('minute').value;
+    var city = document.getElementById('city').value;
+
+    // Simple validation
+    if (!name) { alert('Please enter your name'); return; }
+    if (!day) { alert('Please select day'); return; }
+    if (!month) { alert('Please select month'); return; }
+    if (!year) { alert('Please select year'); return; }
+    if (hour == '') { alert('Please select hour'); return; }
+    if (minute == '') { alert('Please select minute'); return; }
+    if (!city) { alert('Please enter city'); return; }
+
+    var data = {
+        name: name,
+        email: email,
+        day: parseInt(day),
+        month: parseInt(month),
+        year: parseInt(year),
+        hour: parseInt(hour),
+        minute: parseInt(minute),
+        city: city
+    };
+
+    // Show loading
+    document.getElementById('input-section').style.display = 'none';
+    document.getElementById('loading').classList.remove('hidden');
+
+    try {
+        var response = await fetch('/api/calculate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        var result = await response.json();
         
-        const data = {
-            name: document.getElementById('name').value,
-            day: parseInt(document.getElementById('day').value),
-            month: parseInt(document.getElementById('month').value),
-            year: parseInt(document.getElementById('year').value),
-            hour: parseInt(document.getElementById('hour').value),
-            minute: parseInt(document.getElementById('minute').value),
-            city: document.getElementById('city').value
-        };
-
-        if (!data.name || !data.city || !data.day || !data.month || !data.year || data.hour === '' || data.minute === '') {
-            alert('Please fill in all fields');
-            return;
-        }
-
-        document.getElementById('input-section').classList.add('hidden');
-        document.getElementById('loading').classList.remove('hidden');
-
-        try {
-            const response = await fetch('/api/calculate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            const result = await response.json();
-            
-            if (result.success) {
-                displayResults(result);
-            } else {
-                alert('Error: ' + result.error);
-                document.getElementById('input-section').classList.remove('hidden');
+        if (result.success) {
+            displayResults(result);
+            if (email) {
+                showEmailConfirmation(email);
             }
-        } catch (err) {
-            alert('Connection error. Please try again.');
-            document.getElementById('input-section').classList.remove('hidden');
+        } else {
+            alert('Error: ' + result.error);
+            document.getElementById('input-section').style.display = 'block';
         }
-        
-        document.getElementById('loading').classList.add('hidden');
-    });
+    } catch (err) {
+        alert('Error connecting to server. Please try again.');
+        document.getElementById('input-section').style.display = 'block';
+    }
+    
+    document.getElementById('loading').classList.add('hidden');
+});
+
+function showEmailConfirmation(email) {
+    document.getElementById('email-confirmation-container').innerHTML = 
+        '<div class="card email-confirmation">' +
+        '<div class="email-confirmation-content">' +
+        '<span class="email-icon">📧</span>' +
+        '<h3>Your Reading is Being Prepared!</h3>' +
+        '<p>Your detailed Kundli reading will be sent to <strong>' + email + '</strong> within <strong>24 hours</strong>.</p>' +
+        '</div></div>';
 }
 
 function displayResults(data) {
@@ -218,6 +274,9 @@ function displayResults(data) {
     renderSouthChart(data);
     renderNavamshaChart(data);
 
+    // Planet Cards Grid
+    renderPlanetCards(data);
+
     // Lucky Color, Number, Gemstone, Direction
     calculateLuckyAttributes(data);
 
@@ -259,6 +318,43 @@ function displayResults(data) {
     setTimeout(() => {
         document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+}
+
+function renderPlanetCards(data) {
+    const container = document.getElementById('planet-cards-grid');
+    if (!container) return;
+    
+    const planetColors = {
+        'Sun': '#FFD700', 'Moon': '#C0C0C0', 'Mars': '#FF4500', 'Mercury': '#00FF00',
+        'Jupiter': '#FFA500', 'Venus': '#FFB6C1', 'Saturn': '#DAA520', 'Rahu': '#800080', 'Ketu': '#708090'
+    };
+    
+    const planetSVG = {
+        'Sun': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="12" fill="${planetColors['Sun']}"/><circle cx="20" cy="20" r="8" fill="#FFA500"/><line x1="20" y1="2" x2="20" y2="8" stroke="${planetColors['Sun']}" stroke-width="2"/><line x1="20" y1="32" x2="20" y2="38" stroke="${planetColors['Sun']}" stroke-width="2"/><line x1="2" y1="20" x2="8" y2="20" stroke="${planetColors['Sun']}" stroke-width="2"/><line x1="32" y1="20" x2="38" y2="20" stroke="${planetColors['Sun']}" stroke-width="2"/></svg>`,
+        'Moon': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="${planetColors['Moon']}"/><circle cx="26" cy="20" r="12" fill="#050510"/></svg>`,
+        'Mars': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="${planetColors['Mars']}"/><circle cx="16" cy="16" r="4" fill="#8B0000" opacity="0.4"/></svg>`,
+        'Mercury': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="${planetColors['Mercury']}"/><circle cx="15" cy="15" r="5" fill="#00AA00" opacity="0.4"/></svg>`,
+        'Jupiter': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="${planetColors['Jupiter']}"/><ellipse cx="20" cy="20" rx="15" ry="5" fill="#CD853F" opacity="0.5"/><ellipse cx="20" cy="20" rx="15" ry="2" fill="#8B4513" opacity="0.3"/></svg>`,
+        'Venus': `<svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="13" fill="${planetColors['Venus']}"/><circle cx="20" cy="20" r="8" fill="#FF69B4" opacity="0.4"/></svg>`,
+        'Saturn': `<svg width="50" height="35" viewBox="0 0 50 35"><ellipse cx="25" cy="17" rx="6" ry="6" fill="${planetColors['Saturn']}"/><ellipse cx="25" cy="17" rx="16" ry="3" fill="none" stroke="#B8860B" stroke-width="2"/></svg>`,
+        'Rahu': `<svg width="40" height="40" viewBox="0 0 40 40"><path d="M20 5 L25 15 L35 15 L27 22 L30 35 L20 27 L10 35 L13 22 L5 15 L15 15 Z" fill="${planetColors['Rahu']}"/></svg>`,
+        'Ketu': `<svg width="40" height="40" viewBox="0 0 40 40"><path d="M20 5 L23 15 L35 15 L25 22 L28 35 L20 27 L12 35 L15 22 L5 15 L17 15 Z" fill="${planetColors['Ketu']}"/><circle cx="20" cy="20" r="5" fill="#050510"/></svg>`
+    };
+    
+    container.innerHTML = '';
+    data.planets.forEach(p => {
+        const card = document.createElement('div');
+        card.className = `planet-card ${p.name.toLowerCase()}`;
+        card.innerHTML = `
+            <div class="planet-card-icon">${planetSVG[p.name] || '⚪'}</div>
+            <div class="planet-card-name">${p.name}</div>
+            <div class="planet-card-sign">${p.sign_short} ${p.sign}</div>
+            <div class="planet-card-deg">${p.deg}°</div>
+            <div class="planet-card-house">House ${p.house}</div>
+            ${p.retro ? '<span class="planet-card-retro">◐ Retrograde</span>' : ''}
+        `;
+        container.appendChild(card);
+    });
 }
 
 function renderNorthChart(data) {

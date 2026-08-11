@@ -89,6 +89,13 @@ docker-compose up -d
 - **Deployment:** Docker + Gunicorn
 - **Database:** (Add PostgreSQL for user accounts)
 
+## 📧 Email & Leads
+
+- **Contact email:** `supportvedicastro77@gmail.com` (used on Contact page, footer, and mailto links)
+- **Lead collection:** When visitors add their email on the Kundli form, their details are auto-saved to `leads.json`
+- **Admin dashboard:** Visit `/admin` on your site and enter password `vedicadmin123` (change it in the `LEAD_PASSWORD` env var). Export all leads as CSV from `/admin/export?password=...`.
+- **Note:** Render's disk resets on redeploy, so always download your CSV backup before redeploying.
+
 ## 📝 License
 
 MIT License - Free to use and modify.

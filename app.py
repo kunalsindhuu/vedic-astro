@@ -1,17 +1,41 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, abort, send_file, Response
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
 import sys
 import os
 import re
+import io
+import csv
 from datetime import datetime
 import json
+import time
 
 sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages')
 import swisseph as swe
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
+
+# === LEAD STORAGE ===
+LEADS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'leads.json')
+LEAD_PASSWORD = os.environ.get('LEAD_PASSWORD', 'vedicadmin123')
+CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL', 'supportvedicastro77@gmail.com')
+
+def load_leads():
+    if not os.path.exists(LEADS_FILE):
+        return []
+    try:
+        with open(LEADS_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+def save_lead(lead):
+    leads = load_leads()
+    leads.append(lead)
+    with open(LEADS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(leads, f, indent=2, ensure_ascii=False)
+    return len(leads)
 
 # === SECURITY SETTINGS ===
 # Rate limiting - prevent abuse
@@ -402,6 +426,7 @@ def calculate():
         # Input sanitization
         name = sanitize_string(data.get('name', 'User'), max_length=50)
         city = sanitize_string(data.get('city', 'Delhi'), max_length=100)
+        email = sanitize_string(data.get('email', ''), max_length=100)
         
         # Validate date/time inputs
         year = int(data.get('year', 2000))
@@ -469,7 +494,21 @@ def calculate():
                 current_dasha = d; break
         
         predictions = get_predictions({'planets': planet_data})
-        
+
+        # Save lead if email provided
+        if email and re.match(r'^[^@\s]+@[^@\s]+\.[^@\s]+$', email):
+            save_lead({
+                'timestamp': datetime.now().isoformat(),
+                'email': email,
+                'name': name,
+                'birth': {'year': year, 'month': month, 'day': day,
+                          'hour': hour, 'minute': minute, 'city': city},
+                'ascendant': SIGN_NAMES[asc_sign],
+                'sun_sign': SIGN_NAMES[positions['Sun']['sign']],
+                'moon_sign': SIGN_NAMES[positions['Moon']['sign']],
+                'dasha': dasha.get('lord', '') if isinstance(dasha, dict) else ''
+            })
+
         result = {
             'success': True, 'name': name,
             'birth': {'year': year, 'month': month, 'day': day, 'hour': hour, 'minute': minute, 'city': city},
@@ -537,6 +576,51 @@ def compatibility_check():
         })
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 400
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    global LEAD_PASSWORD
+    if request.method == 'POST':
+        submitted = request.form.get('password', '')
+        if submitted == LEAD_PASSWORD:
+            special = request.form.get('special', '')
+            if special:
+                LEAD_PASSWORD = special.strip() or LEAD_PASSWORD
+                save_lead({'timestamp': datetime.now().isoformat(), 'sys': 'PASSWORD_CHANGED', 'special': 'new password saved'})
+        else:
+            return render_template('admin.html', error='Wrong password')
+    elif request.args.get('password') == LEAD_PASSWORD:
+        pass
+    else:
+        return render_template('admin.html', error=None)
+
+    leads = load_leads()
+    return render_template('admin.html', password_ok=True, leads=leads)
+
+@app.route('/admin/export')
+def export_leads():
+    if request.args.get('password') != LEAD_PASSWORD:
+        abort(401)
+    leads = load_leads()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(['Timestamp', 'Email', 'Name', 'Birth Date', 'Time', 'City', 'Ascendant', 'Sun', 'Moon', 'Dasha'])
+    for l in leads:
+        b = l.get('birth', {})
+        writer.writerow([
+            l.get('timestamp', ''),
+            l.get('email', ''),
+            l.get('name', ''),
+            f"{b.get('day', '')}/{b.get('month', '')}/{b.get('year', '')}",
+            f"{b.get('hour', '')}:{b.get('minute', '')}",
+            b.get('city', ''),
+            l.get('ascendant', ''),
+            l.get('sun_sign', ''),
+            l.get('moon_sign', ''),
+            l.get('dasha', '')
+        ])
+    return Response(output.getvalue(), mimetype='text/csv',
+                    headers={'Content-Disposition': 'attachment; filename=leads.csv'})
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)

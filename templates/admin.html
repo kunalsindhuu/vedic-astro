@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - Vedic Astro{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Admin Dashboard</h1>
+    <p>View your collected leads</p>
+</div>
+
+{% if not password_ok %}
+<div class="card" style="max-width: 400px; margin: 0 auto;">
+    <h2>Login</h2>
+    {% if error %}<p style="color: #e74c3c;">{{ error }}</p>{% endif %}
+    <form method="POST">
+        <div class="form-group">
+            <label for="password">Admin Password</label>
+            <input type="password" id="password" name="password" required placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+    <p style="margin-top: 15px; font-size: 0.9em;">Default password: <code>vedicadmin123</code></p>
+</div>
+{% else %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <h2>Leads ({{ leads|length }})</h2>
+        <a class="btn-primary" href="/admin/export?password={{ request.args.get('password', '') }}">Export CSV</a>
+    </div>
+    {% if leads %}
+    <div style="overflow-x: auto; margin-top: 15px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+            <thead>
+                <tr>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Date</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Email</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Name</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Birth</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">City</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Asc</th>
+                    <th style="text-align: left; padding: 8px; border-bottom: 2px solid var(--primary);">Sun</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for l in leads %}
+                <tr>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.timestamp }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.email }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.name }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">
+                        {{ l.birth.day }}/{{ l.birth.month }}/{{ l.birth.year }} {{ l.birth.hour }}:{{ l.birth.minute }}
+                    </td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.birth.city }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.ascendant }}</td>
+                    <td style="padding: 8px; border-bottom: 1px solid #eee;">{{ l.sun_sign }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>No leads yet. Lead will appear here when someone fills the kundli form with their email.</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

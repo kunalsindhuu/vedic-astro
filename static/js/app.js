@@ -662,7 +662,14 @@ const contactForm = document.getElementById('contact-form');
 if (contactForm) {
     contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        alert('Thank you for your message! We will get back to you within 24 hours.');
+        const name = document.getElementById('contact-name').value;
+        const email = document.getElementById('contact-email').value;
+        const subject = document.getElementById('contact-subject').value;
+        const message = document.getElementById('contact-message').value;
+        const mailTo = 'supportvedicastro77@gmail.com';
+        const body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\n\n' + message);
+        const url = 'mailto:' + mailTo + '?subject=' + encodeURIComponent(subject) + '&body=' + body;
+        window.location.href = url;
         contactForm.reset();
     });
 }

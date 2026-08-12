@@ -19,7 +19,9 @@ import uuid
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages')
+_LOCAL_SITE_PACKAGES = '/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages'
+if os.path.exists(_LOCAL_SITE_PACKAGES):
+    sys.path.insert(0, _LOCAL_SITE_PACKAGES)
 import swisseph as swe
 
 app = Flask(__name__, static_folder='static', template_folder='templates')

@@ -1,0 +1,13 @@
+name: Keep Render Awake
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping home page
+        run: curl -fsS -o /dev/null -w "home:%{http_code} time:%{time_total}s\n" https://vedic-astro-6wfj.onrender.com/
+      - name: Ping daily horoscope
+        run: curl -fsS -o /dev/null -w "horoscope:%{http_code} time:%{time_total}s\n" https://vedic-astro-6wfj.onrender.com/daily-horoscope

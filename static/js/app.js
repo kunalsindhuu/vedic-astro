@@ -825,3 +825,30 @@ if (complaintForm) {
         submitFeedback('complaint');
     });
 }
+
+// PWA install prompt
+let deferredPrompt = null;
+const installBtn = document.getElementById('install-btn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.classList.remove('hidden');
+});
+
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+            installBtn.classList.add('hidden');
+        }
+        deferredPrompt = null;
+    });
+}
+
+// Show install hint for iOS (no native prompt) after 3 visits or on scroll
+window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.classList.add('hidden');
+});

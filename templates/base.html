@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{% block meta_desc %}Authentic Vedic astrology birth chart analysis with real planetary calculations{% endblock %}">
+    <meta name="theme-color" content="#0a0e17">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Vedic Astro">
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/static/images/icon-192.png">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
     <title>{% block title %}Vedic Astro{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -19,6 +27,7 @@
                 <span class="logo-text">Vedic Astro</span>
             </a>
             <button class="nav-toggle" onclick="toggleNav()">☰</button>
+            <button id="install-btn" class="install-btn hidden">📲 Install App</button>
             <ul class="nav-links" id="navLinks">
                 <li><a href="/" data-i18n="home">Home</a></li>
                 <li><a href="/kundli" data-i18n="kundli">Free Kundli</a></li>
@@ -77,6 +86,17 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/static/sw.js').then(function (reg) {
+                    console.log('SW registered:', reg.scope);
+                }).catch(function (err) {
+                    console.log('SW registration failed:', err);
+                });
+            });
+        }
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
